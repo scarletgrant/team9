@@ -9,7 +9,6 @@ REQUEST.PY
 The request.py fetches the data from JCDecaux. It gets the list of stations, 
 the data returned from this function is an array in json format.
 
-
 PACKAGES
 The following packages have been used:
 requests -  package to send HTTP/1.1 requests using Python. With requests you can add content like headers, 
