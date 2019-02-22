@@ -26,12 +26,14 @@ last_update                 string        - last_update: timestamp indicating th
 
 """
 
+
 # This class creates an instance of a station class object
 class Station:
 
     # Init function that initializes recurring station attributes
     def __init__(self, id, contract_name, name, address, position, banking,
-    bonus, status, bike_stands, available_bike_stands, available_bikes, last_update):
+                 bonus, status, bike_stands, available_bike_stands,
+                 available_bikes, last_update):
         self.__id = id
         self.__contract_name = contract_name
         self.__name = name
@@ -71,9 +73,9 @@ class Station:
         return self.__position
 
     # Get's the presence of a payment terminal at the station (boolean)
-        @property
-        def banking(self):
-            return self.__banking
+    @property
+    def banking(self):
+        return self.__banking
 
     # Get's the status (String: OPEN, CLOSED) of the station.
     @property
