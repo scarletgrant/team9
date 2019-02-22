@@ -1,4 +1,5 @@
-"""
+""" The Contract Class
+
 creating this contract class is to store the data that we
 retrieve from the JCDecaux developer
 Contract class is the data about which
