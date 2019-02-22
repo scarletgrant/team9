@@ -18,20 +18,22 @@ class Contract:
         # this empty list is to store the cities
         self.__cities = []
 
-    # Function that get the contract name
+    # Function to get the contract name
     @property
     def name(self):
         return self.__name
 
-    # Function that get commercial_name
+    # Function to get commercial_name
     @property
     def commercial_name(self):
         return self.__commercial_name
 
+    # Function to get country_code
     @property
     def country_code(self):
         return self.__country_code
 
+    # Function to get cities
     @property
     def cities(self):
         return self.__cities
