@@ -1,9 +1,21 @@
 '''
+Author: Xiang Zhao
+Contributor: Scarlet Grant
+Copyright: © 2019 Team9
+
 REMEMBER: to remove the api key before publishing and store key in database
 
 REQUEST.PY
 The request.py fetches the data from JCDecaux. It gets the list of stations, 
 the data returned from this function is an array in json format.
+
+
+PACKAGES
+The following packages have been used:
+requests -  package to send HTTP/1.1 requests using Python. With requests you can add content like headers, 
+            form data, multipart files, and parameters via simple Python libraries. 
+            It also allows you to access the response data of Python in the same way.
+            More info: http://docs.python-requests.org/en/master/
 
 DATA FORMAT STATION DATA
 Here is an example of the data that the station returns:
@@ -24,7 +36,7 @@ Here is an example of the data that the station returns:
    "available_bikes": 5,
    "last_update": <timestamp>
  }
- 
+USAGE EXAMPLE: 
 Here is an example how we could use the functions to get the data:
            stations = get_stations()   # returns a list of stations
            for station in stations:    # iterates over each station in the station ist
@@ -42,7 +54,7 @@ The get_contracts function returns an array of json data which has format like b
      "Villeurbanne",
    ]
  }
- Usage:
+USAGE EXAMPLE:
                contracts = get_contracts()         # return a list of contracts
                for contract in contracts:          # iterate each contract in the contracts
                    contract['name']                # get the name of a contract
@@ -50,8 +62,6 @@ The get_contracts function returns an array of json data which has format like b
 '''
 
 # Import package to send HTTP/1.1 requests using Python. 
-# With it, you can add content like headers, form data, multipart files, and parameters via simple Python libraries. 
-# It also allows you to access the response data of Python in the same way.
 import requests
 
 # The host address of JCDecaux
