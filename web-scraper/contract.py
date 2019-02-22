@@ -7,7 +7,7 @@ station
 """
 
 
-# Create a contract class
+# Create a contract class 
 class Contract:
 
     # Initializer/Instance Attributes

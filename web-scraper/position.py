@@ -4,7 +4,7 @@ retrieve from the JCDecaux developer
 Position class is the data about each bike station postion
 """
 
-
+   
 # Create a Position class
 class Positon:
 
