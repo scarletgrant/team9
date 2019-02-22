@@ -16,7 +16,7 @@ class Positon:
      """
 
     # Initializer/Instance Attributes
-    def __init__(self, lat, lng):
+    def __init__(self, lat=0.0, lng=0.0):
         self.__lat = lat
         self.__lng = lng
 

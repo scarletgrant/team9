@@ -26,13 +26,13 @@ class Contract:
      """
 
     # Initializer/Instance Attributes
-    def __init__(self, name, commercial_name, country_code, cities):
+    def __init__(self, name='', cname='', country_code='', cities=''):
         """ Create a new instance of this class """
         self.__name = name
-        self.__commercial_name = commercial_name
+        self.__commercial_name = cname
         self.__country_code = country_code
         # this empty list is to store the cities
-        self.__cities = []
+        self.__cities = cities
 
     # Function to get the contract name
     @property
