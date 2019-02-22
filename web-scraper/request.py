@@ -32,8 +32,8 @@ api_key = '92be62130be380ad2925b05fc3b1e5b3ef1a5a55'
 # Usage:
 #           stations = get_stations()   #return a list of stations
 #           for station in stations:    # iterate each station in the station ist
-#               station.id()            # get the id of a station
-#               station.name()          # get the name of a station
+#               station['id]            # get the id of a station
+#               station['name']          # get the name of a station
 def get_stations():
     # get the full url of the request
     req = hostname + 'stations' + '?apiKey=' + api_key
@@ -54,10 +54,10 @@ def get_stations():
 #   ]
 # }
 # Usage:
-#               contracts = get_contracts()     # return a list of contracts
-#               for contract in contracts:      # iterate each contract in the contracts
-#                   contract.name()             # get the name of a contract
-#                   contract.country_code()     # get the country code of a contract
+#               contracts = get_contracts()         # return a list of contracts
+#               for contract in contracts:          # iterate each contract in the contracts
+#                   contract['name']                # get the name of a contract
+#                   contract['country_code']        # get the country code of a contract
 def get_contracts():
     # ge the full url of the request
     req = hostname + 'contracts' + "?apiKey=" + api_key
