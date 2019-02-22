@@ -60,7 +60,7 @@ USAGE EXAMPLE:
                    contract['country_code']        # get the country code of a contract              
 '''
 
-# Import package to send HTTP/1.1 requests using Python. 
+# Import package to send HTTP/1.1 requests using Python.
 import requests
 
 # The host address of JCDecaux
@@ -69,17 +69,83 @@ hostname = 'https://api.jcdecaux.com/vls/v1/'
 # The api key provided by JCDecaux
 api_key = '92be62130be380ad2925b05fc3b1e5b3ef1a5a55'
 
+
 # Function to get the list of stations from JCDecaux
 def get_stations():
+    """ Fetches data from JCDecaux 
+    Retrieves data through the api provided by the
+    JCDecaux. It will return an array if it fetches 
+    data successfully, otherwise it will return null
+
+    Args:
+        None
+
+    Returns:
+        On success, it returns an array, each element in the array is a type of 
+        hash map. On failure, it returns None. For example:
+        {
+            "number": 123,
+            "contract_name" : "Lyon",
+            "name": "stations name",
+            "address": "address of the station",
+            "position": {
+                "lat": 45.774204,
+                "lng": 4.867512
+            },
+            "banking": true,
+            "bonus": false,
+            "status": "OPEN",
+            "bike_stands": 20,
+            "available_bike_stands": 15,
+            "available_bikes": 5,
+            "last_update": <timestamp>
+        }
+    Raises:
+        None
+    """
     # Gets the full url for the request
     req = hostname + 'stations' + '?apiKey=' + api_key
-    data = requests.get(req).json()
-    # returns data to the variables (to be defined)
-    return data
+    res = requests.get(req)
+
+    if res.status_code == '200':
+        # fetches the data successfully
+        return res.json()
+    else:
+        # fetches the data failed
+        return None
+
 
 # Function to get the list of contracts from JCDecaux
 def get_contracts():
+    """ Fetches data through the api provided by the JCDecaux
+    
+    Args: 
+        None
+
+    Returns:
+        On success, it returns an array, each element in the array is a type of 
+        hash map. On failure, it returns None. For example:
+
+        {
+            "name" : "Lyon",
+            "commercial_name" : "Vélo'v",
+            "country_code" : "FR",
+            "cities" : [
+                "Lyon",
+                "Villeurbanne",
+            ]
+        }
+
+    Raises:
+        None
+     """
     # get the full url of the request
     req = hostname + 'contracts' + "?apiKey=" + api_key
-    data = requests.get(req).json()
-    return data
+    res = requests.get(req)
+
+    if res.status_code == '200':
+        # On success
+        return res.json()
+    else:
+        # On failure
+        return None
