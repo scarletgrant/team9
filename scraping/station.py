@@ -1,4 +1,7 @@
 """
+Author: Scarlet Grant
+Copyright: © 2019 Team9
+
 NOTE FOR TEAM: renamed 'id' (as defined in UML diagram) to 'station_number_in_contract'. JCDecaux notes that this number is not an id,
 so we should consider to adjust that in our UML and create a new unique key in the database with number and contractname combined for example.
 
