@@ -64,10 +64,13 @@ USAGE EXAMPLE:
 import requests
 
 # The host address of JCDecaux
-hostname = 'https://api.jcdecaux.com/vls/v1/'
+JCDHostname = 'https://api.jcdecaux.com/vls/v1/'
 
 # The api key provided by JCDecaux
-api_key = '92be62130be380ad2925b05fc3b1e5b3ef1a5a55'
+JCDAPIKey = '92be62130be380ad2925b05fc3b1e5b3ef1a5a55'
+
+WeatherHostName = 'http://api.openweathermap.org/data/2.5/weather'
+WeatherAPIKey = '715cae6c75f0a5899145e9fdb75a226e'
 
 
 # Function to get the list of stations from JCDecaux
@@ -104,7 +107,7 @@ def get_stations():
         None
     """
     # Gets the full url for the request
-    req = hostname + 'stations' + '?apiKey=' + api_key
+    req = JCDHostname + 'stations' + '?apiKey=' + JCDAPIKey
     res = requests.get(req)
 
     if res.status_code == '200':
@@ -140,7 +143,19 @@ def get_contracts():
         None
      """
     # get the full url of the request
-    req = hostname + 'contracts' + "?apiKey=" + api_key
+    req = JCDHostname + 'contracts' + "?apiKey=" + JCDAPIKey
+    res = requests.get(req)
+
+    if res.status_code == '200':
+        # On success
+        return res.json()
+    else:
+        # On failure
+        return None
+
+
+def get_weather():
+    req = WeatherAPIKey + "?q=dublin" + '&APPID' + WeatherAPIKey
     res = requests.get(req)
 
     if res.status_code == '200':
