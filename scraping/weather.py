@@ -1,128 +1,97 @@
+from os import environ
+import requests
+from records import Database
+import json
+import re
+
+
 class Weather:
     def __init__(self):
-        self.__coord = dict()
-        self.__weather = []
-        self.__base = ''
-        self.__main = dict()
-        self.__visibility = 0
-        self.__wind = dict()
-        self.__clouds = dict()
-        self.__dt = 0
-        self.__sys = dict()
-        self.__id = 0
-        self.__name = ''
-        self.__cod = 0
+        self.__host = environ['WEATHER_HOST']
+        self.__key = environ['WEATHER_KEY']
+        self.__db_host = environ['DB_HOST']
+        self.__db_port = environ['DB_PORT']
+        self.__db_user = environ['DB_USER']
+        self.__db_passwd = environ['DB_PASSWD']
+        self.__db_schema = environ['DB_SCHEMA']
+        self.__db_name = environ['DB_NAME']
+        self.__db_url = "{name}://{user}:{passwd}@{host}:{port}/{schema}".format(
+            name=self.__db_name,
+            user=self.__db_user,
+            passwd=self.__db_passwd,
+            host=self.__db_host,
+            port=self.__db_port,
+            schema=self.__db_schema)
+        self.__db_conn = Database(self.__db_url)
 
-    @property
-    def coord(self):
-        return self.__coord
+    def current(self):
+        req = requests.get('{host}/weather?q=dublin&APPID={key}'.format(
+            host=self.__host, key=self.__key))
 
-    @coord.setter
-    def coord(self, lat, lon):
-        self.__coord['lon'] = lon
-        self.__coord['lat'] = lat
+        if req.status_code != '200':
+            return None
 
-    @property
-    def weather(self):
-        return self.__weather
+        return req.json()
 
-    @weather.setter
-    def weather(self, id=0, main='', desc='', icon=''):
-        self.__weather['id'] = id
-        self.__weather['main'] = main
-        self.__weather['desc'] = desc
-        self.__weather['icon'] = icon
+    def forecast(self):
+        req = requests.get('{host}/forecast?q=dublin&APPID={key}'.format(
+            host=self.__host, key=self.__key))
 
-    @property
-    def base(self):
-        return self.__base
+        if req.status_code != '200':
+            return None
 
-    @base.setter
-    def base(self, base=''):
-        self.__base = base
+        return req.json()
 
-    @property
-    def main(self):
-        return self.__main
+    def save_all(self):
+        data = json.loads(json.dumps(self.forecast()))
+        sql = open('sql/INSERT_FORECAST.sql').read()
+        sql = re.sub(r'\s+', r' ', sql)
 
-    @main.setter
-    def main(self,
-             temp=0.0,
-             pressure=0.0,
-             humidity=0.0,
-             temp_min=0.0,
-             temp_max=0.0):
-        self.__main['temp'] = temp
-        self.__main['pressure'] = pressure
-        self.__main['humidity'] = humidity
-        self.__main['temp_min'] = temp_min
-        self.__main['temp_max'] = temp_max
+        for w_data in data['list']:
+            for w in w_data['weather']:
+                db_data = sql.format(
+                    table='weather',
+                    base=data.get('base', ''),
+                    city_coord_lat=data['city']['coord']['lat'],
+                    city_coord_lon=data['city']['coord']['lon'],
+                    city_country=data['city']['country'],
+                    city_id=data['city']['id'],
+                    city_name=data['city']['name'],
+                    city_population=data['city']['population'],
+                    clouds_all='NULL' if w_data.get('clouds', 'NULL') == None
+                    or w['main'] != 'Cloud' else data['clouds']['all'],
+                    cnt=data['cnt'],
+                    cod=data['cod'],
+                    dt=w_data['dt'],
+                    dt_text=w_data.get('dt_txt', '1970-01-01'),
+                    main_grnd_level=w_data['main']['grnd_level'],
+                    main_humidity=w_data['main']['humidity'],
+                    main_pressure=w_data['main']['pressure'],
+                    main_sea_level=w_data['main']['sea_level'],
+                    main_temp=w_data['main']['temp'],
+                    main_temp_kf=w_data['main']['temp_kf'],
+                    main_temp_max=w_data['main']['temp_max'],
+                    main_temp_min=w_data['main']['temp_min'],
+                    sys_country=w_data['sys'].get('country', ''),
+                    sys_id=w_data['sys'].get('id', 'NULL'),
+                    sys_message=w_data['sys'].get('message', 'NULL'),
+                    sys_pod=w_data['sys'].get('pod', 'NULL'),
+                    sys_sunrise=w_data['sys'].get('sunrise', 'NULL'),
+                    sys_sunset=w_data['sys'].get('sunset', 'NULL'),
+                    sys_type=w_data['sys'].get('type', 'NULL'),
+                    weather_desc='-'.join(w['description'].split(' ')),
+                    weather_icon=w['icon'],
+                    weather_id=w['id'],
+                    weather_main=w['main'],
+                    wind_deg=w_data['wind']['deg'],
+                    wind_speed=w_data['wind']['speed'],
+                    rain_1h='NULL' if w_data.get('rain', None) == None
+                    or w['main'] != 'Rain' else w_data['rain'].get('1h', 'NULL'),
+                    rain_3h='NULL' if w_data.get('rain', None) == None
+                    or w['main'] != 'Rain' else w_data['rain'].get('3h', 'NULL'),
+                    snow_1h='NULL' if w_data.get('snow', None) == None
+                    or w['main'] != 'Snow' else w_data['snow'].get('1h', 'NULL'),
+                    snow_3h='NULL' if w_data.get('snow', None) == None
+                    or w['main'] != 'Snow' else w_data['snow'].get('3h', 'NULL'))
 
-    @property
-    def visibility(self):
-        return self.__visibility
-
-    @visibility.setter
-    def visibility(self, vis=0):
-        self.__visibility = vis
-
-    @property
-    def wind(self):
-        return self.__wind
-
-    @wind.setter
-    def wind(self, speed=0.0):
-        self.__wind['speed'] = speed
-
-    @property
-    def clouds(self):
-        return self.__clouds
-
-    @clouds.setter
-    def clouds(self, all=0):
-        self.__clouds['all'] = all
-
-    @property
-    def dt(self):
-        return self.__dt
-
-    @dt.setter
-    def dt(self, dt=0):
-        self.__dt = dt
-
-    @property
-    def sys(self):
-        return self.__sys
-
-    @sys.setter
-    def sys(self, type=0, id=0, message=0.0, country='', sunrise=0, sunset=0):
-        self.__sys['type'] = type
-        self.__sys['id'] = id
-        self.__sys['message'] = message
-        self.__sys['country'] = country
-        self.__sys['sunrise'] = sunrise
-        self.__sys['sunset'] = sunset
-
-    @property
-    def id(self):
-        return self.__id
-
-    @id.setter
-    def id(self, id=0):
-        self.__id = id
-
-    @property
-    def name(self):
-        return self.__name
-
-    @name.setter
-    def name(self, name=''):
-        self.__name = name
-
-    @property
-    def cod(self):
-        return self.__cod
-
-    @cod.setter
-    def cod(self, cod=0):
-        self.__cod = cod
+                self.__db_conn.query(db_data)
