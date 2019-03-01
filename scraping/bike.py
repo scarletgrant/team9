@@ -37,11 +37,16 @@ class Bike:
             return None
 
         data = loads(dumps(req.json()))
-        sql = open('sql/INSERT_STATION.sql').read()
-        sql = re.sub(r'\s+', r' ', sql)
+
+        insert_sql = open('sql/INSERT_STATION.sql').read()
+        insert_sql = re.sub(r'\s+', r' ', insert_sql)
+        select_sql = open('sql/SELECT_STATIONS.sql').read()
+        select_sql = re.sub(r'\s+', r' ', select_sql)
+
+        query = ''
 
         for station in data:
-            query = sql.format(
+            insert_query = insert_sql.format(
                 id=station['number'],
                 contract_name=re.sub(r"'+", r'', station['contract_name']),
                 name=re.sub(r"'+", r'', station['name']),
@@ -56,4 +61,29 @@ class Bike:
                 last_update=station['last_update'],
                 address=re.sub(r"'+", r'', station['address']))
 
+            query += insert_query
+
+        self.__db_conn.bulk_query(query)
+
+    def save_contracts(self):
+        req = requests.get(self.__contracts_url)
+
+        if req.status_code != 200:
+            return None
+
+        data = loads(dumps(req.json()))
+        sql = open('sql/INSERT_CONTRACT.sql').read()
+        sql = re.sub(r'\s+', r' ', sql)
+
+        query = ''
+
+        for cont in data:
+            for city in cont['cities']:
+                insert_query = sql.format(
+                    name=cont['name'],
+                    commerical_name=cont['commerical_name'],
+                    country_code=cont['country_code'],
+                    city=city)
+
+                query += insert_query
             self.__db_conn.query(query)

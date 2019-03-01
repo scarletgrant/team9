@@ -4,7 +4,6 @@ from records import Database
 import json
 import re
 
-
 class Weather:
     def __init__(self):
         self.__host = environ['WEATHER_HOST']
@@ -46,10 +45,12 @@ class Weather:
         data = json.loads(json.dumps(self.forecast()))
         sql = open('sql/INSERT_FORECAST.sql').read()
         sql = re.sub(r'\s+', r' ', sql)
+        
+        query = ''
 
         for w_data in data['list']:
             for w in w_data['weather']:
-                db_data = sql.format(
+                insert_query = sql.format(
                     table='weather',
                     base=data.get('base', ''),
                     city_coord_lat=data['city']['coord']['lat'],
@@ -94,4 +95,6 @@ class Weather:
                     snow_3h='NULL' if w_data.get('snow', None) == None
                     or w['main'] != 'Snow' else w_data['snow'].get('3h', 'NULL'))
 
-                self.__db_conn.query(db_data)
+            query += insert_query
+
+        self.__db_conn.bulk_query(query)

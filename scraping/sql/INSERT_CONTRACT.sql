@@ -4,3 +4,5 @@ INSERT INTO contract (
 VALUES (
     '{name}', '{commerical_name}', '{country_code}', '{city}'
 )
+ON CONFLICT
+DO NOTHING;

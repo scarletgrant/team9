@@ -19,3 +19,5 @@ INSERT INTO
                     '{sys_country}', {sys_sunrise}, {sys_sunset}, {city_id}, 
                     {cod}, '{city_name}', {snow_1h}, {snow_3h}, {main_temp_kf},
                     '{dt_text}', {cnt}, '{city_country}', {city_population}, '{sys_pod}')
+        ON CONFLICT
+        DO NOTHING;
