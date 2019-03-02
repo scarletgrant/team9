@@ -29,14 +29,16 @@ class Weather:
 
         logger()
 
+        logging.info('Established database connection')
+
     def current(self):
         try:
             req = requests.get('{host}/weather?q=dublin&APPID={key}'.format(
             host=self.__host, key=self.__key))
         except ConnectionError:
             logging.error('Connection error')
-            
-        if req.status_code != '200':
+
+        if req.status_code != 200:
             return None
 
         return req.json()
@@ -47,7 +49,8 @@ class Weather:
         except ConnectionError:
             logging.error('Connection error')
 
-        if req.status_code != '200':
+        if req.status_code != 200:
+            logging.warning(f'Bad request: {req.status_code}')         
             return None
 
         return req.json()
@@ -57,8 +60,6 @@ class Weather:
         sql = open('scraper/sql/INSERT_FORECAST.sql').read()
         sql = re.sub(r'\s+', r' ', sql)
         
-        query = ''
-
         if data != None and data.get('list', None) != None:
             for w_data in data['list']:
                 for w in w_data['weather']:
@@ -107,6 +108,6 @@ class Weather:
                         snow_3h='NULL' if w_data.get('snow', None) == None
                         or w['main'] != 'Snow' else w_data['snow'].get('3h', 'NULL'))
 
-                query += insert_query
+                    logging.info(f'{insert_query}')
 
-            self.__db_conn.bulk_query(query)
+                    self.__db_conn.bulk_query(insert_query)

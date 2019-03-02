@@ -1,5 +1,5 @@
 export WEATHER_HOST='http://api.openweathermap.org/data/2.5'
-export WEATHER_KEY='715cae6c75f0a5899145e9fdb75a226e'
+export WEATHER_KEY='dd0a4798e371d086cfa6a26a7b45743c'
 export DB_USER='postgres'
 export DB_PASSWD='UCDTeam9'
 export DB_PORT='5432'

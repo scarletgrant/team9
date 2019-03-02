@@ -78,12 +78,10 @@ class Bike:
                 last_update=station['last_update'],
                 address=re.sub(r"'+", r'', station['address']))
 
-            logging.info(f'Parse JSON data')
-            logging.info(f'The SQL query: {insert_query}')
+            # logging.info(f'Parse JSON data')
+            # logging.info(f'The SQL query: {insert_query}')
 
-            query += insert_query
-
-        self.__db_conn.bulk_query(query)
+            self.__db_conn.bulk_query(insert_query)
 
     def save_contracts(self):
         try:
@@ -115,8 +113,7 @@ class Bike:
                         country_code=cont['country_code'],
                         city=re.sub(r"'+", r'', city))
 
-                    logging.info(f'Parse JSON data')
-                    logging.info(f'The SQL query: {insert_query}')
+                    # logging.info(f'Parse JSON data')
+                    # logging.info(f'The SQL query: {insert_query}')
 
-                    query += insert_query
-        self.__db_conn.bulk_query(query)
+                    self.__db_conn.bulk_query(insert_query)
