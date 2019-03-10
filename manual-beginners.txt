@@ -1,0 +1,72 @@
+
+TO DO SG:
+For more info:https://www.youtube.com/watch?v=QnDWIZuWYW0
+Left off at minute 23. Before creating a navigation bar
+Find the way to direct to css rather then bootstrap or get a bootstrap instead if it suits our design.
+Check both options:
+
+MANUAL SO FAR TO RUN THE APP
+To start the app:
+Have python installed
+
+On the Mac
+Install latest pip:
+python3 -m pip install --user --upgrade pip
+
+Installing virtual Environment
+python3 -m pip install --user virtualenv
+
+Creating a virtual environment:
+python3 -m virtualenv env
+
+Activate virtual environment:
+source env/bin/activate
+or ex: source /Users/admin/Documents/UCD/2_Software_Engineering/team9_dublinBikes_venv_py_37/bin/activate
+
+Have Flask installed
+pip install Flask
+pip install -U Flask
+
+Leaving virtual env:
+(team9_dublinBikes_venv_py_37) Scarlets-iMac:~ admin$ deactivate
+
+Go to direcotory of app:
+Scarlets-iMac:~ admin$ cd /Users/admin/Documents/UCD/2_Software_Engineering/team9
+
+Set an environment variable to the file that will want to be pour Flask application. On Windows: set FLASK_APP=app.py
+Scarlets-iMac:team9 admin$ export FLASK_APP=app.py
+
+Run the app
+flask run
+
+* Serving Flask app "app.py"
+* Environment: production
+  WARNING: Do not use the development server in a production environment.
+  Use a production WSGI server instead.
+* Debug mode: off
+* Running on http://127.0.0.1:5000/
+
+or http://localhost:5000/
+
+run application in debug mode to not having to terminate and rerun the app in terminal again for every change (on windows set instead of export):
+export FLASK_DEBUG=1
+flask run
+
+Now changes happen immediate and you only have to refresh the browser. To do this easier we add in the function in the app:
+if __name__ == "__main__":
+    # if yes, than run (when you put the app in debug mode you don't have to restart the server all the time to see any changes in the script.)
+    # app.debug = True
+    app.run(debug=True)
+
+"""
+Have flask-mysqldb installed
+In terminal:
+pip install flask-mysqldb
+
+Leaving the virtualenv:
+deactivate
+
+create app.py
+python app.py
+
+SEE APP FILES FOR COMMENTS
