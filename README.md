@@ -1,5 +1,5 @@
 # Dublin Bikes Availability checker
-**team9**
+**Team9**
 
 Software Engineering Project
 
@@ -108,4 +108,11 @@ Find nearest bike at desired/current location in least amount of clicks;
 Find nearest dock at desired/current destination in least amount of clicks; 
 Show forecast of bike availability (at given datetime and location); 
 Show availability for card payments at given location.
+
+**4. Wireframes**
+
+<p align="left">
+  <img src="https://github.com/scarletgrant/team9/blob/master/documentation/Wireframe_DublinBikes_Desktop_V01.png" height="400" title="hover text">
+<alt="wireframes">
+</p>
 
