@@ -1,15 +1,9 @@
 
-TO DO SG:
-For more info:https://www.youtube.com/watch?v=QnDWIZuWYW0
-Left off at minute 23. Before creating a navigation bar
-Find the way to direct to css rather then bootstrap or get a bootstrap instead if it suits our design.
-Check both options:
-
-MANUAL SO FAR TO RUN THE APP
+CONCEPT MANUAL TO RUN THE APP
 To start the app:
-Have python installed
+Have python installed on your environment:
 
-On the Mac
+On the Mac:
 Install latest pip:
 python3 -m pip install --user --upgrade pip
 

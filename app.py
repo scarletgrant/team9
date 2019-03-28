@@ -1,7 +1,6 @@
 '''Code is commented for beginning programmers to read and understand every line.
     Will be simplified afterwards.
 '''
-
 # import Flask in this app script from flask on the server
 # import render_template to render a template from the app, in this case our index.html that we saved as template. Don't forget the comma
 from flask import Flask, render_template
@@ -9,9 +8,9 @@ from flask import Flask, render_template
 # app is a Flask application/function of Flask with the name and filename of the app
 app = Flask(__name__)
 
-# the ,route specifies where the location of the file? and url.
+# the route specifies where the location of the file? and url.
 @app.route("/")
-#eventually create extra route to the same view
+# eventually create extra route to the same view
 @app.route("/home")
 
 # function to return index.html. We create a folder calld templates in the root forlder as well where we store the index.html
@@ -36,4 +35,4 @@ if __name__ == "__main__":
     app.run(debug=True)
 
     # flask wtform
-#ck forms wysiwyg form editor
+# forms wysiwyg form editor
