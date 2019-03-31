@@ -1,0 +1,129 @@
+<!--<!DOCTYPE html>-->
+<html lang="en">
+<head>
+    <!-- Standard head items -->
+    <title>Dublin Bikes Availability Forecast</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Dublin Bikes Availability Forecast">
+    <meta name="keywords" content="dublin, bikes, availability">
+    <meta name="author" content="Team 9">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- add favicon -->
+    <link rel="shortcut icon" href="favicon.ico" type="x-icon">
+    <link rel="icon" href="favicon.ico" type="x-icon">
+
+    <!--Stylesheets-->
+    <link rel="stylesheet" href="css/style.css">
+    <!--stylesheet from git.io/normalize normalize.css v3.0.2 | MIT License-->
+    <link rel="stylesheet" href="normalize.css" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<!-- OPENING LAYOUT-->
+      <div class="wrapper">
+      <div class="grid-super">
+
+<!-- NAVIGATION -->
+        <div class="grid-super_header">
+          <div class="navigation-bar">
+            <ul>
+              <li>Dublin Bikes Availability Forecast</li>
+            </ul>
+          </div>
+        </div>
+
+<!-- RIGHT - ADS Header -->
+        <div class="grid-super_right_header">
+          <div class="right-header">
+            <ul>
+              <li>Ads</li>
+            </ul>
+          </div>
+        </div>
+
+<!--LEFT-->
+        <div class="grid-super_left">
+          
+            <div class="forecasts">
+
+              <!--NEAREST BIKE SUMMARY-->
+              <div class="current_near_available_bikes">
+              <img src="placeholder.gif" alt="Nearest Bikes; number bikes in 250/500mt" height="80">
+                </div>
+
+              <!--AVAILABILITY FORECAST SUMMARY-->
+              <div class="availability_forecast">
+              <img src="placeholder.gif" alt="Forecasted Availability (per hour)" height="80">
+                </div>
+
+              <!--TODAY'S BIKING WEATHER SUMMARY-->
+              <div class="weather_summary">
+              <img src="placeholder.gif" alt="Today's Weather Summary" height="80">
+                </div>
+
+
+                </div>
+            </div>
+
+<!--RIGHT-->
+        <div class="grid-super_right">
+
+            <!-- Reserved for Ads -->
+                    <!-- Picture-->
+          <img src="ads.jpg" alt="Ads" width=100%>
+        </div>
+
+<!--CENTER-->
+
+        <div class="grid-super_middle">
+          <div class="main-content">
+            <div class="plan-trip">
+              <h1>Plan your trip</h1>
+                    <div id="planTripForm">
+                      <!-- Form for user selection -->
+
+                      <form>
+
+                          <label for="departureLocation">From: </label>
+                          <input id="departureLocation" type="string" value="">
+                          <br><br>
+
+                          <label for="arrivalLocation">To: </label>
+                          <input id="arrivalLocation" type="string" value="">
+                          <br><br>
+
+                          <!-- submit / search button -->
+                          <button type="button" onclick="">Plan trip</button>
+                      </form>
+
+                      <!-- Picture-->
+                        <img src="maps.jpg" alt="Google Map">
+
+
+                    </div>
+
+                <!-- *******link to javascript functions - file to add if needed-->
+                <script src="plan-trip.js">
+                </script>
+              </div>
+            </div>
+          </div>
+
+ <!--FOOTER-->
+      <div class="grid-super_footer">
+          <div class="footer">
+            <p>© Team 9. All rights reserved.</p>
+      </div>
+            </div>
+          </div>
+
+      <!-- CLOSING LAYOUT-->
+      </div>
+    </div>
+
+</body>
+</html>
