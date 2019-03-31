@@ -1,7 +1,7 @@
 {
+  "description": "File that configures how to start the data-server ",
   "name": "open-bike",
   "version": "1.0.0",
-  "description": "the backend ",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
