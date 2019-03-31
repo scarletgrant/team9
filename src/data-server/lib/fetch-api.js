@@ -1,8 +1,9 @@
 /* 
-  Caution
-  This api should not be used in any internal source code or testing file.
-  The node will report errors such as xxx is not a function.
-  Use it only as a external api
+  This is an API to provide the internal server-data to the clients. It serves the following server-data:
+    1. Bike-data from bike.js
+    2. Weather-data from weather.js
+    3. Geo location from geo.js
+    4. Distance of the bike stations in relation to the (dynamic) user's location
 */
 
 /**
