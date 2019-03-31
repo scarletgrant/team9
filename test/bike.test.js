@@ -1,4 +1,4 @@
-const fetch = require('../lib/fetch')
+const fetch = require('../lib/fetch-api')
 const expect = require('chai').expect
 
 const { describe, it } = require('mocha')
