@@ -1,3 +1,5 @@
+# Old version, Placeholder for script to start the application all at once
+
 export WEATHER_HOST='http://api.openweathermap.org/data/2.5'
 export WEATHER_KEY='dd0a4798e371d086cfa6a26a7b45743c'
 export DB_USER='postgres'
