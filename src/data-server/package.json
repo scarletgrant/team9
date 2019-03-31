@@ -1,5 +1,5 @@
 {
-  "description": "File that configures how to start the data-server ",
+  "description": "Default formatted file that configures how to start the data-server ",
   "name": "open-bike",
   "version": "1.0.0",
   "main": "app.js",
