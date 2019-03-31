@@ -1,8 +1,7 @@
-import asyncio
+# Fetches the retreived bike- and weather data from our server to provide this data to the client
 
 from .bike import Bike
 from .weather import Weather
-from time import sleep
 
 if __name__ == '__main__':
     bike = Bike()
