@@ -1,0 +1,27 @@
+{
+  "description": "Default formatted file that configures how to start the data-server ",
+  "name": "open-bike",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "mocha",
+    "debug": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/algo4/open-bike.git"
+  },
+  "author": "zhaoxiang",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/algo4/open-bike/issues"
+  },
+  "homepage": "https://github.com/algo4/open-bike#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "nodemon": "^1.18.10"
+  }
+}
