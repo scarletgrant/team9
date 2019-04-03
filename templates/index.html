@@ -1,4 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+
 {% extends "layout.html" %}
 {% block content %}
 
-{% endblock content %}
+<script>
+
+// script snippet copied from: https://github.com/Stephen-P-Murphy/Dublin-Bikes-Availability/tree/master/Dublin%20Bikes%20Web%20App
+
+var myCentre; // centre of map
+var myarray; // results from Dublin Bikes API
+var map; // variable for maps
+var mapProps; // properties of map
+var marker; // marker on map
+
+// function to request the user's location 
+function getUserLocation() {
+    if (!navigator.geolocation) { // if location coordinates can't be found
+        myCentre = new google.maps.LatLng(53.349722,-6.260278); //Dubline Spire is set as default location
+        return;
+    }
+    function found(position) { // if found, set centre of map to user's location
+        myCentre = new google.maps.LatLng(position.coords.latitude,
+                                         position.coords.longitude);
+    }
+    navigator.geolocation.getCurrentPosition(found);
+}
+getUserLocation();
+</script>
+
+
+
+{% endblock %}
+</body>
+</html>

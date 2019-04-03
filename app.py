@@ -5,9 +5,13 @@
 # import Flask in this app script from flask on the server
 # import render_template to render a template from the app, in this case our index.html that we saved as template. Don't forget the comma
 from flask import Flask, render_template, url_for
+from flask_googlemaps import GoogleMaps
+from flask_googlemaps import Map
+
 
 # Creat a Flask application with the name and filename of the app. Static files are served from the 'statis' directory.
 app = Flask(__name__)#, static_url_path='')
+
 
 # the route specifies the internal url and serves 'index.html'.
 @app.route("/")
@@ -16,9 +20,18 @@ def index():
 
 @app.route('/map')
 def map():
-    return "<h1>map</h1>"
+    return render_template('map.html')
+
+@app.route('/weather')
+def weather():
+    return render_template('weather.html')
 
 
+# you can set key as config
+app.config['GOOGLEMAPS_KEY'] = "AIzaSyBnXdQMLBpjplz_Qvfv316_etKTiO5kV2A"
+
+# Initialize the extension
+GoogleMaps(app)
 
 
 #from flask import abort
