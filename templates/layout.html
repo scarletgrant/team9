@@ -3,50 +3,60 @@
 <!-- Layout.html contains html elements that recur on every view.
 We have this file so it needs to be rendered only once.-->
 
-{% block content %}
-{% endblock %}
-           
 <head>
-    <!-- Standard head items -->
-    <title>Dublin Bikes Availability Forecast2</title>
-    <meta charset="utf-8">
-    <meta name="description" content="Dublin Bikes Availability Forecast">
-    <meta name="keywords" content="dublin, bikes, availability">
-    <meta name="author" content="Team 9">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Standard head items -->
+  <title>Dublin Bikes Availability Forecast2</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Dublin Bikes Availability Forecast">
+  <meta name="keywords" content="dublin, bikes, availability">
+  <meta name="author" content="Team 9">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- add favicon -->
-    <link rel="shortcut icon" href="favicon.ico" type="x-icon">
-    <link rel="icon" href="favicon.ico" type="x-icon">
+  <!-- add favicon -->
+  <link rel="shortcut icon" href="favicon.ico" type="x-icon">
+  <link rel="icon" href="favicon.ico" type="x-icon">
 
-    <!--Stylesheets-->
-    <link rel="stylesheet" href="static/style.css" type="text/css">
-    <!--stylesheet from git.io/normalize normalize.css v3.0.2 | MIT License-->
-    <link rel="stylesheet" href="static/normalize.css" type="text/css">
-    <!-- probably redundant stylesheet from www.getskeleton.com * Free to use under the MIT license.
+  <!--Stylesheets-->
+  <link rel="stylesheet" href="static/style.css" type="text/css">
+  <!--stylesheet from git.io/normalize normalize.css v3.0.2 | MIT License-->
+  <link rel="stylesheet" href="static/normalize.css" type="text/css">
+  <!-- probably redundant stylesheet from www.getskeleton.com * Free to use under the MIT license.
     <link rel="stylesheet" href="skeleton.css"  type="text/css"> -->
-    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 
 </head>
 
 <body>
-<!-- OPENING LAYOUT-->
+
+  {% block request_user_location %}{% endblock %}
+
+  <!-- OPENING LAYOUT-->
   <div class="wrapper">
-  <div class="grid-super">
+    <div class="grid-super">
 
-<!--page view content block comes here?-->
+      <!-- NAVIGATION - empty, single bar only-->
+      <div class="grid-super_header">
+        <div class="navigation-bar">
+          <ul>
+            <li>Dublin Bikes Availability Forecast</li>
+          </ul>
+        </div>
+      </div>
 
-
-  <!-- NAVIGATION -->
-        <div class="grid-super_header">
-          <div class="navigation-bar">
-            <ul>
-              <li>Dublin Bikes Availability Forecast</li>
-            </ul>
+              <!--CENTER-->
+        <div class="grid-super_middle">
+          <div class="main-content">
+            {% block content_middle %}
+            {% endblock %}
           </div>
         </div>
 
-  <!-- RIGHT - ADS Header -->
+      <!--LEFT-->
+      <div class="grid-super_left">
+        {% block content_forcasts %}
+        {% endblock %}
+
+        <!-- RIGHT TOP- ADS Header -->
         <div class="grid-super_right_header">
           <div class="right-header">
             <ul>
@@ -55,56 +65,22 @@ We have this file so it needs to be rendered only once.-->
           </div>
         </div>
 
-  <!--LEFT-->
-
-        <div class="grid-super_left">
-
-          <!-- Search block -->
-          <div class="forecasts">
-
-              <!--NEAREST BIKE SUMMARY-->
-              <div class="current_near_available_bikes">
-              <img src="placeholder.gif" alt="Nearest Bikes; number bikes in 250/500mt" height="80">
-                </div>
-
-              <!--AVAILABILITY FORECAST SUMMARY-->
-              <div class="availability_forecast">
-              <img src="placeholder.gif" alt="Forecasted Availability (per hour)" height="80">
-                </div>
-
-              <!--TODAY'S BIKING WEATHER SUMMARY-->
-              <div class="weather_summary">
-              <img src="placeholder.gif" alt="Today's Weather Summary" height="80">
-                </div>
-                </div>
-
-        <!-- Picture-->
-            </div>     
-
-  <!--RIGHT-->
+        <!--RIGHT-->
         <div class="grid-super_right">
-            <!-- Reserved for Ads -->
+            {% include 'ads.html' %}
         </div>
 
-       <!--CENTER-->
-{% block content1 %}
-{% endblock %}
-
-
-
-        
-
-  <!--FOOTER-->
-      <div class="grid-super_footer">
-          <div class="footer-content">
+        <!--FOOTER-->
+        <div class="grid-super_footer">
+          <div class="footer">
             <p>© Team 9. All rights reserved.</p>
-      </div>
-            </div>
           </div>
+        </div>
+      </div>
 
-  <!-- CLOSING LAYOUT-->
+      <!-- CLOSING LAYOUT-->
+    </div>
   </div>
-</div>
 
 </body>
 

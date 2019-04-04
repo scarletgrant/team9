@@ -3,11 +3,10 @@
 <body>
 
 {% extends "layout.html" %}
-{% block content %}
 
+{% block request_user_location %}
+<!-- SG: REQUEST ACCESS TO USERs'LOCATION; script snippet copied from: https://github.com/Stephen-P-Murphy/Dublin-Bikes-Availability/tree/master/Dublin%20Bikes%20Web%20App -->
 <script>
-
-// script snippet copied from: https://github.com/Stephen-P-Murphy/Dublin-Bikes-Availability/tree/master/Dublin%20Bikes%20Web%20App
 
 var myCentre; // centre of map
 var myarray; // results from Dublin Bikes API
@@ -29,8 +28,76 @@ function getUserLocation() {
 }
 getUserLocation();
 </script>
+{% endblock %}
+
+{% block content_forcasts %}
+
+          <!-- Search block -->
+          <div class="forecasts">
+
+              <!--NEAREST BIKE SUMMARY-->
+              <div class="current_near_available_bikes">
+              <img src="placeholder.gif" alt="Nearest Bikes; number bikes in 250/500mt" height="80">
+                </div>
+
+              <!--AVAILABILITY FORECAST SUMMARY-->
+              <div class="availability_forecast">
+              <img src="placeholder.gif" alt="Forecasted Availability (per hour)" height="80">
+                </div>
+
+              <!--TODAY'S BIKING WEATHER SUMMARY-->
+              <div class="weather_summary">
+              <img src="placeholder.gif" alt="Today's Weather Summary" height="80">
+                </div>
+                </div>
+
+        <!-- Picture-->
+            </div>  
+
+{% endblock %}
 
 
+{% block content_middle %}
+
+ <!--CENTER-->
+ <div class="grid-super_middle">
+    <div class="main-content">
+      <div class="plan-trip">
+        <h1>Plan your trip</h1>
+          <p>
+
+            </p>
+              <div id="planTripForm">
+                <!-- Form for user selection -->
+
+                <form>
+
+                    <label for="departureLocation">From: </label>
+                    <input id="departureLocation" type="string" value="">
+                    <br><br>
+
+                    <label for="arrivalLocation">To: </label>
+                    <input id="arrivalLocation" type="string" value="">
+                    <br><br>
+
+                    <!-- submit / search button -->
+                    <button type="button" onclick="">Plan trip</button>
+                </form>
+    
+            </div>
+
+            <!-- *******link to javascript functions - file to add if needed-->
+            <script src="plan-trip.js">
+            </script>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block content_ads %}
+
+test ads
 
 {% endblock %}
 </body>

@@ -16,8 +16,9 @@ app = Flask(__name__)#, static_url_path='')
 # the route specifies the internal url and serves 'index.html'.
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('index.html')    
 
+# !!remove the ones below later, redundant
 @app.route('/map')
 def map():
     return render_template('map.html')
@@ -25,6 +26,7 @@ def map():
 @app.route('/weather')
 def weather():
     return render_template('weather.html')
+
 
 
 # you can set key as config
