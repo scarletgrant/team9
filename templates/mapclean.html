@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=11&center=53.3603%2C-6.3151&key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I" allowfullscreen></iframe>
+
+
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<title>Dublin Bikes App</title>
+<script src="jquery-2.2.3.min.js" type="text/javascript"></script>
+<script src="lodash.js"></script>
+<style type="text/css">
+html, body {
+height: 100%;
+margin: 0;
+padding: 0;
+}
+#map {
+height: 65%;
+}
+</style>
+</head>
+
+
+<body>
+ 
+ <script type="text/javascript">
+ function initMap() {
+ google.charts.load("current", {
+    packages : [ "corechart" ]
+});
+
+ROOT = window.location.origin;
+
+radius = 20, zoom = 14;
+var centre = {
+ lat : 53.346763,
+ lng : -6.2568436
+ };
+ map = new google.maps.Map(document.getElementById('map'), {
+zoom : zoom,
+center : centre
+});
+}
+
+</script>
+<script type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I }}
+    &amp;callback=initMap"
+type="text/javascript">
+</script>
+
+</body>
+</html>

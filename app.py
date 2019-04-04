@@ -10,13 +10,15 @@ from flask_googlemaps import Map
 
 
 # Creat a Flask application with the name and filename of the app. Static files are served from the 'statis' directory.
-app = Flask(__name__)#, static_url_path='')
-
+app = Flask(__name__, static_url_path='')
+# use configurations and keys from config.py class
+app.config.from_object('config')
 
 # the route specifies the internal url and serves 'index.html'.
 @app.route("/")
-def index():
-    return render_template('index.html')    
+def root():
+    # take API key stored in config file
+   return render_template('index.html', MAPS_APIKEY=app.config["MAPS_APIKEY"])    
 
 # !!remove the ones below later, redundant
 @app.route('/map')
@@ -27,6 +29,10 @@ def map():
 def weather():
     return render_template('weather.html')
 
+
+@app.route('/mapclean')
+def mapclean():
+    return render_template('mapclean.html')
 
 
 # you can set key as config
