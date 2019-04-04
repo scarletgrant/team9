@@ -83,7 +83,7 @@ body {
 @media screen and (max-width: 620px) {
     .grid-super {
         display: grid;
-        grid-template-areas: 'grid-super_header' 'grid-super_middle' 'grid-super_left' 'grid-super_right_header' 'grid-super_right' 'grid-super_footer';
+        grid-template-areas: 'grid-super_header' 'grid-super_left' 'grid-super_middle' 'grid-super_right_header' 'grid-super_right' 'grid-super_footer';
         grid-template-columns: 1fr;
         grid-template-rows: 50px 1fr 1fr 50px 1fr 50px;
     }
