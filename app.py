@@ -10,7 +10,11 @@ from flask_googlemaps import Map
 
 
 # Creat a Flask application with the name and filename of the app. Static files are served from the 'statis' directory.
+<<<<<<< HEAD
 app = Flask(__name__, static_url_path='/static')
+=======
+app = Flask(__name__, static_url_path='')
+>>>>>>> 6c2abcc11b92d93f5cf5076d24c8b3afc4342102
 # use configurations and keys from config.py class
 app.config.from_object('config')
 
