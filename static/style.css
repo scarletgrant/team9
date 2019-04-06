@@ -162,9 +162,9 @@ body {
     padding: 20px 25px 40px 32px;
 }
 
-.main-content {
+.maps-content {
     grid-area: grid-super_middle;
-    padding: 10px 30px 30px 30px;
+    padding: 0px;
     min-width: 250px;
     max-width: 800px;
 }
@@ -189,6 +189,16 @@ body {
 
 
 /* -----------MODULES--------------- */
+
+
+/* MAP */
+
+
+/* Always set the map height explicitly to define the size of the div element that contains the map. */
+
+#map {
+    height: 600px;
+}
 
 
 /*Inactive navigation-bar used as header. Can be activated when extra pages will be added. */

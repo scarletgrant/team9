@@ -46,15 +46,14 @@ We have this file so it needs to be rendered only once.-->
 
               <!--CENTER-->
         <div class="grid-super_middle">
-          <div class="main-content">
-            {% block content_middle %}
-            {% endblock %}
+          <div class="maps-content">
+                      {% include 'includes/_map.html' %}
           </div>
         </div>
 
       <!--LEFT-->
       <div class="grid-super_left">
-        {% block content_forcasts %}
+        {% block content_forecasts %}
         {% endblock %}
 
         <!-- RIGHT TOP- ADS Header -->
