@@ -6,6 +6,7 @@
 
 {% block request_user_location %}
 <!-- SG: REQUEST ACCESS TO USERs'LOCATION; script snippet copied from: https://github.com/Stephen-P-Murphy/Dublin-Bikes-Availability/tree/master/Dublin%20Bikes%20Web%20App -->
+
 <script>
 
 var myCentre; // centre of map
@@ -62,6 +63,8 @@ getUserLocation();
  <!--CENTER-->
  <div class="grid-super_middle">
     <div class="main-content">
+
+        {% include 'includes/_map.html' %}
       <div class="plan-trip">
         <h1>Plan your trip</h1>
           <p>
@@ -95,10 +98,5 @@ getUserLocation();
 
 {% endblock %}
 
-{% block content_ads %}
-
-test ads
-
-{% endblock %}
 </body>
 </html>
