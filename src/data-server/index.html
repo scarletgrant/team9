@@ -1,0 +1,168 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <style>
+      #map {
+        min-height: 100%;
+        min-width: 100%;
+      }
+
+      #mapBar {
+        margin: 10px 2em;
+      }
+
+      #searchBar {
+        margin: 10px 2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ui grid">
+      <!-- <div class="six wide column"></div> -->
+      <div class="column">
+        <div class="row">
+          <div class="ui action fluid input" id="searchBar">
+            <input type="text" placeholder="Search..." id="searchBox" />
+            <button class="ui button" onclick="search()">
+              Search
+            </button>
+          </div>
+        </div>
+        <div class="row" id="mapBar">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let map = null
+
+      function getCurrentPositionPermission() {
+        currentLocation().then(pos => {
+          return pos
+        })
+      }
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: { lat: 53.35014, lng: -6.266155 },
+          zoom: 13
+        })
+      }
+
+      function search() {
+        const address = document.querySelector('#searchBox').value
+        const current = currentLocation(address)
+
+        current.then(pos => {
+          map.setCenter(pos)
+          const url = `/api/v1/bikes?country=ie`
+          const options = {
+            method: 'GET',
+            cache: 'no-cache',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json'
+            }
+          }
+
+          fetch(url, options)
+            .then(bikes => bikes.json())
+            .then(bikes => {
+              for (station of bikes.features) {
+                const des = {
+                  lat: station.geometry.coordinates[0],
+                  lng: station.geometry.coordinates[1]
+                }
+
+                if (distanceWithin(pos, des, 1000)) {
+                  const latLng = new google.maps.LatLng(des.lat, des.lng)
+                  const marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    info: station.properties
+                  })
+                }
+              }
+            })
+        })
+      }
+
+      function distanceWithin(src, des, range) {
+        console.log(src, des)
+        const toRadians = degree => {
+          return degree * (Math.PI / 180)
+        }
+
+        const theta1 = toRadians(src.lat)
+        const theta2 = toRadians(des.lat)
+        const delta1 = toRadians(des.lat - src.lat)
+        const delta2 = toRadians(des.lng - src.lng)
+
+        const R = 6371e3
+        const a =
+          Math.pow(Math.sin(delta1 / 2), 2) +
+          Math.cos(theta1) *
+            Math.cos(theta2) *
+            Math.pow(Math.sin(delta2 / 2), 2)
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        const distance = R * c
+
+        if (distance <= range) {
+          return true
+        }
+
+        return false
+      }
+
+      function currentLocation(address) {
+        return new Promise((resolve, reject) => {
+          if ('geolocation' in navigator && address === '') {
+            navigator.geolocation.getCurrentPosition(pos => {
+              resolve({
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude
+              })
+            })
+          } else {
+            const url = `/api/v1/coordinates?city=${address}&country=ie`
+            const options = {
+              method: 'GET',
+              cache: 'no-cache',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+              }
+            }
+
+            fetch(url, options)
+              .then(coords => coords.json())
+              .then(coords => {
+                resolve({
+                  lat: coords[0].lat,
+                  lng: coords[0].lon
+                })
+              })
+          }
+        })
+      }
+    </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&callback=initMap"
+      async
+      defer
+    ></script>
+  </body>
+</html>
