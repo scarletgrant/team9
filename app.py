@@ -4,10 +4,11 @@
 #!/usr/bin/env/python
 # import Flask in this app script from flask on the server
 # import render_template to render a template from the app, in this case our index.html that we saved as template. Don't forget the comma
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
 
+import requests
 
 # Creat a Flask application with the name and filename of the app. Static files are served from the 'statis' directory.
 app = Flask(__name__, static_url_path='/static')
@@ -19,6 +20,20 @@ app.config.from_object('config')
 def root():
     # take API key stored in config file
     return render_template('index_2.html', MAPS_APIKEY=app.config["MAPS_APIKEY"])
+
+
+@app.route('/api/v1/bikes')
+def bikes():
+    r = requests.get('http://46.101.83.10:8000/api/v1/bikes?country=ie')
+    return r.text
+
+
+@app.route('/api/v1/coordinates')
+def coords():
+    r = requests.get(
+        'http://46.101.83.10:8000/api/v1/coordinates?city=' + request.args.get('city') + '&country=ie')
+
+    return r.text
 
 # !!remove the ones below later, redundant
 @app.route('/map')
