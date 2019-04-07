@@ -19,7 +19,7 @@ app.config.from_object('config')
 @app.route("/")
 def root():
     # take API key stored in config file
-    return render_template('index_2.html', MAPS_APIKEY=app.config["MAPS_APIKEY"])
+    return render_template('index.html', MAPS_APIKEY=app.config["MAPS_APIKEY"])
 
 
 @app.route('/api/v1/bikes')
