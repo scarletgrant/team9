@@ -1,4 +1,165 @@
 <html lang="en">
+<<<<<<< HEAD
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Pair programming notes: this makes it compatible between different http protocols, he includes that in every file.-->
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+        <!-- <link rel="stylesheet" href="style.css" /> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+        <style>
+     /* use min- height and width, otherwise it does not work */
+            #map {
+                min-height: 100%;
+                min-width: 100%;
+            }
+
+            #mapBar {
+                margin: 10px 2em;
+            }
+
+            #searchBar {
+                margin: 10px 2em;
+            }
+        </style>
+    </head>
+    <body>
+        <!--ui grid is from the cloud fare library-->
+        <div class="ui grid">
+            <!-- <div class="six wide column"></div> -->
+            <div class="column">
+                <div class="row">
+                            <!--ui action fluid input is from the cloud fare library-->
+                    <div class="ui action fluid input" id="searchBar">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            id="searchBox"
+                        />
+                        <!--ui button is from the cloud fare library-->
+                <!--Xiang uses semantic-ui.com for the UI elements -->
+                        <button class="ui button" onclick="search()">
+
+                            Search
+                        </button>
+                    </div>
+                </div>
+                <!--we call it bar becasue it represents a single line-->
+
+                <div class="row" id="mapBar">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+
+<!-- CMD ? is automatically adding command openings and closings in any language -->
+<script>
+            let map = null
+
+            function getCurrentPositionPermission() {
+                currentLocation().then(pos => {
+                    return pos
+                })
+            }
+// creates one new instance of the google maps class, with 'new' in JS. 
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), 
+                //this are objects centre and zoom:
+                {
+                    center: { lat: 53.35014, lng: -6.266155 },
+                    zoom: 13
+                })
+            }
+
+            function search() {
+                // creates the onclick even of the search button
+                //2 options: get the current location or get the address as typed
+//querySelector is similar to get element by id . 
+//build in functionality of javascript. Queryselecter can be doen with anything that is a class or id in the css
+
+                const address = document.querySelector('#searchBox').value
+                const current = currentLocation(address)
+// VS trick: cursor on currentLocation and press command and you will find the connected element definition
+  // current then get the position
+                current.then(pos => {
+                    //after we get the position we center the map to that place.
+                    map.setCenter(pos)
+                    //send the request to our server API
+                    const url = `/api/v1/bikes?country=ie`
+                    //during testing we disable the cache to get only new latest data
+                    // options is just a variable name here for storing the http protocol :
+                    // TIP from Xiang: MDN webdocs: Follow tutorial on HTTP protocol
+                    const options = {
+                        method: 'GET',
+                        cache: 'no-cache',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json'
+                        }
+                    }
+                    // JS function that feteches data form the server
+                    // we add the api url and the options
+                    // Fetch basic concepts from developer.mozilla.org
+
+                    // Add chrome extension Restlet client for REST API testing
+
+                    fetch(url, options)
+                        .then(bikes => bikes.json())
+                        .then(bikes => {
+                            // bikes returned from the server
+                            // features is used as array in GEO JSON is an array and each element respresents a station
+                            // geojson.org describes more about this
+                            // you can add any property you like.
+                            // start with official documentation. They provide the links with complete descriptions.
+                            // try to figure out how to run the example on the local machine first
+                            // have a high overview of how the code works and than change 
+
+                            for (station of bikes.features) {
+                                //for each one station. des is destination here
+                                const des = {
+                                    lat: station.geometry.coordinates[0],//lat
+                                    lng: station.geometry.coordinates[1] //lng
+                                }
+                                // position is our current position or the typed address. destination is the coordinate for the station
+
+                                if (distanceWithin(pos, des, 1000)) {// can add 250 , 500 etc
+                                // check out sementic ui documentation for adding extra steps
+                                    //calculates how the distance from the source and destination. within 1 km. 
+                                    // creates the markers. We create a new instance for the markers and bind it to the map
+                                    // google uses LatLng constructor
+                                    const latLng = new google.maps.LatLng(
+                                        des.lat,
+                                        des.lng
+                                    )
+                                    // constant marker, new instance of marker
+                                    const marker = new google.maps.Marker({
+                                        position: latLng, //coordinates
+                                        map: map, // we put a map over the map
+                                        info: station.properties // include our properties. infor is the name that we gave there.
+                                    })
+                                }
+                            }
+                        })
+                })
+            }
+// We need to start the server to show the markers on the map.
+// We need to install something for now untill we have a script to start it.
+// NodeJs is easiest
+
+
+
+            function distanceWithin(src, des, range) {
+                console.log(src, des)
+                const toRadians = degree => {
+                    return degree * (Math.PI / 180)
+=======
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -83,6 +244,7 @@
                 const des = {
                   lat: station.geometry.coordinates[0],
                   lng: station.geometry.coordinates[1]
+>>>>>>> 97b5520c4f7beb46c4ef6f5dbc4739229737c22f
                 }
 
                 if (distanceWithin(pos, des, 1000)) {
@@ -154,6 +316,18 @@
                   lat: coords[0].lat,
                   lng: coords[0].lon
                 })
+<<<<<<< HEAD
+            }
+        </script>
+        <!-- import the google map library
+        the call back is another name for the function, when the librry download is completed it calls for the functioninitMap -->
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&callback=initMap"
+            async
+            defer
+        ></script>
+    </body>
+=======
               })
           }
         })
@@ -165,4 +339,5 @@
       defer
     ></script>
   </body>
+>>>>>>> 97b5520c4f7beb46c4ef6f5dbc4739229737c22f
 </html>
