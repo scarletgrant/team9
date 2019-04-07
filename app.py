@@ -13,6 +13,7 @@ import requests
 # Creat a Flask application with the name and filename of the app. Static files are served from the 'statis' directory.
 app = Flask(__name__, static_url_path='/static')
 # use configurations and keys from config.py class
+app.config["CACHE_TYPE"] = "null"
 app.config.from_object('config')
 
 # the route specifies the internal url and serves 'index.html'.
