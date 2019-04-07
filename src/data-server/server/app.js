@@ -50,16 +50,6 @@ const get = (req, res) => {
   }
 }
 
-const returnHomePage = (req, res) => {
-  const home = fs.readFileSync('./index.html')
-
-  res.writeHead(200, {
-    'Content-Type': 'text/html'
-  })
-  res.write(home)
-  res.end()
-}
-
 /**
  * Handle the weather forecast request
  * @param {IncomingMessage} req
