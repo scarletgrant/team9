@@ -6,6 +6,7 @@
 const process = require('process')
 const https = require('https')
 const queryString = require('querystring')
+const env = require('./env')
 
 /**
  * The QueryOption type
@@ -85,7 +86,7 @@ const search = (city, country, opts) => {
      */
     autocomplete: opts.autocomplete || true,
     country: country,
-    access_token: process.env.GEO_TOKEN,
+    access_token: env.env().geoToken,
     /**
      * Optional properties
      */

@@ -1,7 +1,7 @@
 {
-  "description": "Default formatted file that configures how to start the data-server ",
   "name": "open-bike",
   "version": "1.0.0",
+  "description": "the backend ",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -18,9 +18,14 @@
     "url": "https://github.com/algo4/open-bike/issues"
   },
   "homepage": "https://github.com/algo4/open-bike#readme",
-  "dependencies": {},
+  "dependencies": {
+    "pg": "^7.9.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^5.2.11"
+  },
   "devDependencies": {
     "chai": "^4.2.0",
+    "eslint": "^5.16.0",
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10"
   }

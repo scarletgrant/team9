@@ -6,6 +6,7 @@
 const process = require('process')
 const https = require('https')
 const queryString = require('querystring')
+const env = require('./env')
 
 const cache = {}
 
@@ -44,7 +45,7 @@ const cache = {}
 const search = country => {
   const query = {
     contract: '',
-    apiKey: process.env.BIKE_TOKEN
+    apiKey: env.env().bikeToken
   }
 
   const options = {
@@ -119,7 +120,7 @@ const search = country => {
 
 const contracts = () => {
   const query = {
-    apiKey: process.env.BIKE_TOKEN
+    apiKey: env.env().bikeToken
   }
 
   const options = {
@@ -196,7 +197,7 @@ const geoJSON = stations => {
       type: 'feature',
       geometry: {
         type: 'Point',
-        coordinates: [station.position[0], station.position[1]]
+        coordinates: [station.position.lat, station.position.lng]
       },
       properties: {
         banking: station.banking,
