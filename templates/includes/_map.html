@@ -1,125 +1,159 @@
-<head>
-  <style>
-    /* Always set the map height explicitly to define the size of the div element that contains the map. 
-       Note that some CSS that works within quirks mode is not valid in standards mode. 
-       In specific, all percentage-based sizes must inherit from parent block elements, 
-       and if any of those ancestors fail to specify a size, they are assumed to be sized at 0 x 0 pixels. 
-       For that reason, we include the following <style> declaration:*/
-    #map {
-      height: 600px;
-    }
-  </style>
-</head>
-<body>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&libraries=places"></script>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <style>
+      #map {
+        min-height: 100%;
+        min-width: 100%;
+      }
 
-  <div id="map"></div>
+      #mapBar {
+        margin: 10px 2em;
+      }
 
-  <script>
-    var map
-    function initMap() {
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 53.3257802, lng: -6.2691264 },
-        zoom: 14
-      })
+      #searchBar {
+        margin: 10px 2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ui grid">
+      <!-- <div class="six wide column"></div> -->
+      <div class="column">
+        <div class="row">
+          <div class="ui action fluid input" id="searchBar">
+            <input type="text" placeholder="Search..." id="searchBox" />
+            <button class="ui button" onclick="search()">Search</button>
+          </div>
+        </div>
+        <div class="row" id="mapBar">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
 
-      // showStationMarkers();
+    <script>
+      let map = null
 
-      //function showStationMarkers(data) {
-      //$.getJSON(ROOT + '/stations', null, function(data) {
-      //if ('stations' in data) {
-      //var stations = data.stations;
-      //console.log('stations', stations);
-      //_.forEach(stations, function(station) {
-      //// console.log(station.name, station.number);
-      //var marker = new google.maps.Marker({
-      //position : {
-      //lat : station.position_lat,
-      //lng : station.position_lng
-      //},
-      //map : map,
-      //title : station.name,
-      //});
-      //station_number : station.number
-      //marker.addListener("click", function() {
-      //    //do something when marker is clicked
-      //}
-      //});
-      //})
-      //});
-      //}
+      function getCurrentPositionPermission() {
+        currentLocation().then(pos => {
+          return pos
+        })
+      }
 
-      ///////demo
-      //<div id="demo">
-      //<button type="button" onclick="loadXMLDoc()">Change Content</button>
-      //</div>
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: { lat: 53.35014, lng: -6.266155 },
+          zoom: 13
+        })
+      }
 
-      function loadXMLDoc() {
-        var xhttp = new XMLHttpRequest()
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            document.getElementById('demo').innerHTML = this.responseText
+      function search() {
+        const address = document.querySelector('#searchBox').value
+        const current = currentLocation(address)
+
+        current.then(pos => {
+          map.setCenter(pos)
+          const url = `/api/v1/bikes?country=ie`
+          const options = {
+            method: 'GET',
+            cache: 'no-cache',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json'
+            }
           }
+
+          fetch(url, options)
+            .then(bikes => bikes.json())
+            .then(bikes => {
+              for (station of bikes.features) {
+                const des = {
+                  lat: station.geometry.coordinates[0],
+                  lng: station.geometry.coordinates[1]
+                }
+
+                if (distanceWithin(pos, des, 10000)) {
+                  const latLng = new google.maps.LatLng(des.lat, des.lng)
+                  const marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    info: station.properties
+                  })
+                }
+              }
+            })
+        })
+      }
+
+      function distanceWithin(src, des, range) {
+        const toRadians = degree => {
+          return degree * (Math.PI / 180)
         }
-        xhttp.open('GET', 'http://178.62.21.125:8000', true)
-        xhttp.send()
+
+        const theta1 = toRadians(src.lat)
+        const theta2 = toRadians(des.lat)
+        const delta1 = toRadians(des.lat - src.lat)
+        const delta2 = toRadians(des.lng - src.lng)
+
+        const R = 6371e3
+        const a =
+          Math.pow(Math.sin(delta1 / 2), 2) +
+          Math.cos(theta1) *
+            Math.cos(theta2) *
+            Math.pow(Math.sin(delta2 / 2), 2)
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        const distance = R * c
+
+        if (distance <= range) {
+          return true
+        }
+
+        return false
       }
 
-      /////include markers example1edited
-      // Create a <script> tag and set the USGS URL as the source.
-      var script = document.createElement('script')
-      // This example uses a local copy of the GeoJSON stored at
-      // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-      script.src =
-        'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js'
-      document.getElementsByTagName('head')[0].appendChild(script)
-    }
+      function currentLocation(address) {
+        return new Promise((resolve, reject) => {
+          if ('geolocation' in navigator && address === '') {
+            navigator.geolocation.getCurrentPosition(pos => {
+              resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+            })
+          } else {
+            const url = `/api/v1/coordinates?city=${address}&country=ie`
+            const options = {
+              method: 'GET',
+              cache: 'no-cache',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+              }
+            }
 
-    // Loop through the results array and place a marker for each
-    // set of coordinates.
-    window.eqfeed_callback = function(results) {
-      for (var i = 0; i < results.features.length; i++) {
-        var coords = results.features[i].geometry.coordinates
-        var latLng = new google.maps.LatLng(coords[1], coords[0])
-        var marker = new google.maps.Marker({
-          position: latLng,
-          map: map
+            fetch(url, options)
+              .then(coords => coords.json())
+              .then(coords => {
+                resolve({ lat: coords[0].lat, lng: coords[0].lon })
+              })
+          }
         })
       }
-      /////end include markers example1
-
-      /////include markers example
-      // Create a <script> tag and set the USGS URL as the source.
-      var script = document.createElement('script')
-      // This example uses a local copy of the GeoJSON stored at
-      // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-      script.src =
-        'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js'
-      document.getElementsByTagName('head')[0].appendChild(script)
-    }
-
-    // Loop through the results array and place a marker for each
-    // set of coordinates.
-    window.eqfeed_callback = function(results) {
-      for (var i = 0; i < results.features.length; i++) {
-        var coords = results.features[i].geometry.coordinates
-        var latLng = new google.maps.LatLng(coords[1], coords[0])
-        var marker = new google.maps.Marker({
-          position: latLng,
-          map: map
-        })
-      }
-      /////end include markers example
-    }
-  </script>
-
-  <script
-    type="text/javascript"
-    src="https://www.gstatic.com/charts/loader.js"
-  ></script>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&callback=initMap"
-    async
-    defer
-  ></script>
-</body>
+    </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&callback=initMap"
+      async
+      defer
+    ></script>
+  </body>
+</html>
