@@ -10,6 +10,7 @@ const process = require('process')
 const geo = require('./geo')
 const https = require('https')
 const queryString = require('querystring')
+const env = require('./env')
 
 /**
  * Return generic weather information
@@ -32,15 +33,13 @@ const search = (lat, lon, opts) => {
   const options = {
     hostname: 'api.darksky.net',
     path: `/forecast/${
-      process.env.WEATHER_TOKEN
+      env.env().weatherToken
     }/${lat},${lon}?${queryString.stringify(query)}`,
     method: 'GET',
     headers: {
       Accept: 'application/json'
     }
   }
-
-  console.info(options.path)
 
   return new Promise((resolve, reject) => {
     const req = https.request(options, res => {
@@ -88,16 +87,18 @@ const currently = (city, country) => {
         const options = {
           exclude: ['minutely', 'hourly', 'daily', 'alerts', 'flags']
         }
-        search(data.lat, data.lon, options)
+
+        const tasks = data.map(location => {
+          return search(location.lat, location.lon, options)
+        })
+
+        Promise.all(tasks)
           .then(data => {
-            return data
+            resolve(data)
           })
           .catch(err => {
-            reject(err)
+            throw new Error(err)
           })
-      })
-      .then(data => {
-        resolve(data.currently)
       })
       .catch(err => {
         reject(err)
@@ -129,7 +130,9 @@ const forecast = (city, country) => {
           .then(data => {
             resolve(data)
           })
-          .catch(err => console.error(err))
+          .catch(err => {
+            throw new Error(err)
+          })
       })
       .catch(err => {
         reject(err)

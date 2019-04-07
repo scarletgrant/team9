@@ -1,0 +1,25 @@
+{
+  "name": "team9",
+  "version": "1.0.0",
+  "description": "**Team9**",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scarletgrant/team9.git"
+  },
+  "keywords": [],
+  "author": "zhaoxiang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scarletgrant/team9/issues"
+  },
+  "homepage": "https://github.com/scarletgrant/team9#readme"
+}

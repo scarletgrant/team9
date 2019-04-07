@@ -1,9 +1,8 @@
 /* 
-  This is an API to provide the internal server-data to the clients. It serves the following server-data:
-    1. Bike-data from bike.js
-    2. Weather-data from weather.js
-    3. Geo location from geo.js
-    4. Distance of the bike stations in relation to the (dynamic) user's location
+  Caution
+  This api should not be used in any internal source code or testing file.
+  The node will report errors such as xxx is not a function.
+  Use it only as a external api
 */
 
 /**
@@ -15,6 +14,7 @@ const geo = require('./geo')
 const weather = require('./weather')
 const bike = require('./bike')
 const distance = require('./distance')
+const environment = require('./env')
 
 module.exports = {
   coordinate: geo.coordinate,
@@ -25,5 +25,6 @@ module.exports = {
   },
   distance: {
     coordsInRange: distance.coordsInRange
-  }
+  },
+  env: environment.env
 }

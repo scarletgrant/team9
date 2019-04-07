@@ -1,13 +1,70 @@
- <head>
- <style>
-      /* Always set the map height explicitly to define the size of the div element that contains the map. 
+<head>
+  <style>
+    /* Always set the map height explicitly to define the size of the div element that contains the map. 
        Note that some CSS that works within quirks mode is not valid in standards mode. 
        In specific, all percentage-based sizes must inherit from parent block elements, 
        and if any of those ancestors fail to specify a size, they are assumed to be sized at 0 x 0 pixels. 
        For that reason, we include the following <style> declaration:*/
-      #map {
-        height: 600px;
+    #map {
+      height: 600px;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&libraries=places"></script>
+
+  <div id="map"></div>
+
+  <script>
+    var map
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 53.3257802, lng: -6.2691264 },
+        zoom: 14
+      })
+
+      // showStationMarkers();
+
+      //function showStationMarkers(data) {
+      //$.getJSON(ROOT + '/stations', null, function(data) {
+      //if ('stations' in data) {
+      //var stations = data.stations;
+      //console.log('stations', stations);
+      //_.forEach(stations, function(station) {
+      //// console.log(station.name, station.number);
+      //var marker = new google.maps.Marker({
+      //position : {
+      //lat : station.position_lat,
+      //lng : station.position_lng
+      //},
+      //map : map,
+      //title : station.name,
+      //});
+      //station_number : station.number
+      //marker.addListener("click", function() {
+      //    //do something when marker is clicked
+      //}
+      //});
+      //})
+      //});
+      //}
+
+      ///////demo
+      //<div id="demo">
+      //<button type="button" onclick="loadXMLDoc()">Change Content</button>
+      //</div>
+
+      function loadXMLDoc() {
+        var xhttp = new XMLHttpRequest()
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById('demo').innerHTML = this.responseText
+          }
+        }
+        xhttp.open('GET', 'http://178.62.21.125:8000', true)
+        xhttp.send()
       }
+<<<<<<< HEAD
       
     </style>
 
@@ -27,100 +84,64 @@
         });
 
 //showStationMarkers();
+=======
+>>>>>>> 97b5520c4f7beb46c4ef6f5dbc4739229737c22f
 
-//function showStationMarkers(data) {
-//$.getJSON(ROOT + '/stations', null, function(data) {
-//if ('stations' in data) {
-//var stations = data.stations;
-//console.log('stations', stations);
-//_.forEach(stations, function(station) {
-//// console.log(station.name, station.number);
-//var marker = new google.maps.Marker({
-//position : {
-//lat : station.position_lat,
-//lng : station.position_lng
-//},
-//map : map,
-//title : station.name,
-//});
-//station_number : station.number
-//marker.addListener("click", function() {
-//    //do something when marker is clicked
-//}
-//});
-//})
-//});
-//}
-
-///////demo
-//<div id="demo">
-//<button type="button" onclick="loadXMLDoc()">Change Content</button>
-//</div>
-
-function loadXMLDoc() {
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    document.getElementById("demo").innerHTML =
-    this.responseText;
-  }
-};
-xhttp.open("GET", "http://178.62.21.125:8000", true);
-xhttp.send();
-}
-
-/////include markers example1edited
+      /////include markers example1edited
       // Create a <script> tag and set the USGS URL as the source.
-        var script = document.createElement('script');
-        // This example uses a local copy of the GeoJSON stored at
-        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
-        document.getElementsByTagName('head')[0].appendChild(script);
+      var script = document.createElement('script')
+      // This example uses a local copy of the GeoJSON stored at
+      // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+      script.src =
+        'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js'
+      document.getElementsByTagName('head')[0].appendChild(script)
+    }
+
+    // Loop through the results array and place a marker for each
+    // set of coordinates.
+    window.eqfeed_callback = function(results) {
+      for (var i = 0; i < results.features.length; i++) {
+        var coords = results.features[i].geometry.coordinates
+        var latLng = new google.maps.LatLng(coords[1], coords[0])
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: map
+        })
       }
+      /////end include markers example1
 
-      // Loop through the results array and place a marker for each
-      // set of coordinates.
-      window.eqfeed_callback = function(results) {
-        for (var i = 0; i < results.features.length; i++) {
-          var coords = results.features[i].geometry.coordinates;
-          var latLng = new google.maps.LatLng(coords[1],coords[0]);
-          var marker = new google.maps.Marker({
-            position: latLng,
-            map: map
-          });
-        }
-/////end include markers example1
-
-
-
-/////include markers example
+      /////include markers example
       // Create a <script> tag and set the USGS URL as the source.
-        var script = document.createElement('script');
-        // This example uses a local copy of the GeoJSON stored at
-        // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
-        document.getElementsByTagName('head')[0].appendChild(script);
+      var script = document.createElement('script')
+      // This example uses a local copy of the GeoJSON stored at
+      // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+      script.src =
+        'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js'
+      document.getElementsByTagName('head')[0].appendChild(script)
+    }
+
+    // Loop through the results array and place a marker for each
+    // set of coordinates.
+    window.eqfeed_callback = function(results) {
+      for (var i = 0; i < results.features.length; i++) {
+        var coords = results.features[i].geometry.coordinates
+        var latLng = new google.maps.LatLng(coords[1], coords[0])
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: map
+        })
       }
+      /////end include markers example
+    }
+  </script>
 
-      // Loop through the results array and place a marker for each
-      // set of coordinates.
-      window.eqfeed_callback = function(results) {
-        for (var i = 0; i < results.features.length; i++) {
-          var coords = results.features[i].geometry.coordinates;
-          var latLng = new google.maps.LatLng(coords[1],coords[0]);
-          var marker = new google.maps.Marker({
-            position: latLng,
-            map: map
-          });
-        }
-/////end include markers example
-
-      }
-    </script>
-
-<script type="text/javascript"
-src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&callback=initMap"
-    async defer></script>
-
-  </body>
+  <script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"
+  ></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&callback=initMap"
+    async
+    defer
+  ></script>
+</body>
