@@ -33,9 +33,7 @@
         <div class="row">
           <div class="ui action fluid input" id="searchBar">
             <input type="text" placeholder="Search..." id="searchBox" />
-            <button class="ui button" onclick="search()">
-              Search
-            </button>
+            <button class="ui button" onclick="search()">Search</button>
           </div>
         </div>
         <div class="row" id="mapBar">
@@ -85,7 +83,7 @@
                   lng: station.geometry.coordinates[1]
                 }
 
-                if (distanceWithin(pos, des, 1000)) {
+                if (distanceWithin(pos, des, 10000)) {
                   const latLng = new google.maps.LatLng(des.lat, des.lng)
                   const marker = new google.maps.Marker({
                     position: latLng,
@@ -99,7 +97,6 @@
       }
 
       function distanceWithin(src, des, range) {
-        console.log(src, des)
         const toRadians = degree => {
           return degree * (Math.PI / 180)
         }
@@ -131,10 +128,7 @@
         return new Promise((resolve, reject) => {
           if ('geolocation' in navigator && address === '') {
             navigator.geolocation.getCurrentPosition(pos => {
-              resolve({
-                lat: pos.coords.latitude,
-                lng: pos.coords.longitude
-              })
+              resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude })
             })
           } else {
             const url = `/api/v1/coordinates?city=${address}&country=ie`
@@ -150,10 +144,7 @@
             fetch(url, options)
               .then(coords => coords.json())
               .then(coords => {
-                resolve({
-                  lat: coords[0].lat,
-                  lng: coords[0].lon
-                })
+                resolve({ lat: coords[0].lat, lng: coords[0].lon })
               })
           }
         })
