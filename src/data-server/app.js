@@ -1,3 +1,3 @@
 const server = require('./server/app')
 
-server.start(8000)
+server.start(80)
