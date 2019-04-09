@@ -1,5 +1,4 @@
 <html lang="en">
-<<<<<<< HEAD
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -149,7 +148,7 @@
                                     const marker = new google.maps.Marker({
                                         position: latLng, //coordinates
                                         map: map, // we put a map over the map
-                                        info: station.properties // include our properties. infor is the name that we gave there.
+                                        info: station.properties // include our properties. info is the name that we gave there.
                                     })
                                 }
                             }
@@ -166,112 +165,6 @@
                 console.log(src, des)
                 const toRadians = degree => {
                     return degree * (Math.PI / 180)
-=======
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <!-- <link rel="stylesheet" href="style.css" /> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
-    <style>
-      #map {
-        min-height: 100%;
-        min-width: 100%;
-      }
-
-      #mapBar {
-        margin: 10px 2em;
-      }
-
-      #searchBar {
-        margin: 10px 2em;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="ui grid">
-      <!-- <div class="six wide column"></div> -->
-      <div class="column">
-        <div class="row">
-          <div class="ui action fluid input" id="searchBar">
-            <input type="text" placeholder="Search..." id="searchBox" />
-            <button class="ui button" onclick="search()">
-              Search
-            </button>
-          </div>
-        </div>
-        <div class="row" id="mapBar">
-          <div id="map"></div>
-        </div>
-      </div>
-    </div>
-
-    <script>
-      let map = null
-
-      function getCurrentPositionPermission() {
-        currentLocation().then(pos => {
-          return pos
-        })
-      }
-
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: { lat: 53.35014, lng: -6.266155 },
-          zoom: 13
-        })
-      }
-
-      function search() {
-        const address = document.querySelector('#searchBox').value
-        const current = currentLocation(address)
-
-        current.then(pos => {
-          map.setCenter(pos)
-          const url = `/api/v1/bikes?country=ie`
-          const options = {
-            method: 'GET',
-            cache: 'no-cache',
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json'
-            }
-          }
-
-          fetch(url, options)
-            .then(bikes => bikes.json())
-            .then(bikes => {
-              for (station of bikes.features) {
-                const des = {
-                  lat: station.geometry.coordinates[0],
-                  lng: station.geometry.coordinates[1]
->>>>>>> 97b5520c4f7beb46c4ef6f5dbc4739229737c22f
-                }
-
-                if (distanceWithin(pos, des, 1000)) {
-                  const latLng = new google.maps.LatLng(des.lat, des.lng)
-                  const marker = new google.maps.Marker({
-                    position: latLng,
-                    map: map,
-                    info: station.properties
-                  })
-                }
-              }
-            })
-        })
-      }
-
-      function distanceWithin(src, des, range) {
-        console.log(src, des)
-        const toRadians = degree => {
-          return degree * (Math.PI / 180)
-        }
 
         const theta1 = toRadians(src.lat)
         const theta2 = toRadians(des.lat)
@@ -323,7 +216,6 @@
                   lat: coords[0].lat,
                   lng: coords[0].lon
                 })
-<<<<<<< HEAD
             }
         </script>
         <!-- import the google map library
@@ -334,7 +226,6 @@
             defer
         ></script>
     </body>
-=======
               })
           }
         })
@@ -346,5 +237,4 @@
       defer
     ></script>
   </body>
->>>>>>> 97b5520c4f7beb46c4ef6f5dbc4739229737c22f
 </html>
