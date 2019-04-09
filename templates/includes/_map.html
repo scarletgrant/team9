@@ -1,86 +1,180 @@
+<!-------------------- Contains notes from pair programming after example was already written --------------------------->
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <!-- <link rel="stylesheet" href="style.css" /> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
-    <style>
-      #map {
-        min-height: 100%;
-        min-width: 100%;
-      }
 
-      #mapBar {
-        margin: 10px 2em;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- this makes the script compatible between different http protocols.-->
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+  <style>
+    #map {
+      /* use min-height and min-width, with simply height and width it does not work */
+      min-height: 100%;
+      min-width: 100%;
+    }
 
-      #searchBar {
-        margin: 10px 2em;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="ui grid"> <!--ui grid is an element from the cloud fare library-->
-      <!-- <div class="six wide column"></div> -->
-      <div class="column">
-        <div class="row">
-          <div class="ui action fluid input" id="searchBar"> <!--ui action fluid input is from the cloud fare library-->
-            <input type="text" placeholder="Search..." id="searchBox" /> <!--ui button is from the cloud fare library-->
-            <button class="ui button" onclick="search()">Search</button> <!--Xiang uses semantic-ui.com for the UI elements -->
-          </div>
-        </div>
-         <!--XZ calls it bar becasue it represents a single line-->
-        <div class="row" id="mapBar">
-          <div id="map"></div>
+    #mapBar {
+      margin: 10px 2em;
+    }
+
+    #searchBar {
+      margin: 10px 2em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ui grid">
+    <!--ui grid is an element from the cloud fare library-->
+    <!-- <div class="six wide column"></div> -->
+    <div class="column">
+      <div class="row">
+        <div class="ui action fluid input" id="searchBar">
+          <!--ui action fluid input is from the cloud fare library-->
+          <input type="text" placeholder="Search..." id="searchBox" />
+          <!--ui button is from the cloud fare library-->
+          <button class="ui button" onclick="search()">Search</button>
+          <!--Xiang uses semantic-ui.com for the UI elements -->
         </div>
       </div>
+      <!--XZ calls it bar becasue it represents a single line-->
+      <div class="row" id="mapBar">
+        <div id="map"></div>
+      </div>
     </div>
+  </div>
 
-    <!-- Get current position -->
-    <script>
-      let map = null
+  <!--**************************** Get users location *******************************-->
+  <script>
+    let map = null
 
-      function getCurrentPositionPermission() {
-        currentLocation().then(pos => {
-          return pos
-        })
-      }
+    function getCurrentPositionPermission() {
+      currentLocation().then(position => {
+        return position
+      })
+    }
 
-      // creates one new instance of the google maps class, with 'new' in JS.
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
+    // ***************** Creates one new instance of the google maps class, with keword 'new' in JavaScript. **********
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
         //this are objects centre and zoom:
-          center: { lat: 53.35014, lng: -6.266155 },
-          zoom: 13
-        })
+        center: { lat: 53.35014, lng: -6.266155 },
+        zoom: 13
+      })
+    }
+
+    // ****************** Creates the onclick event at the search button *********************************
+    function search() {
+
+      // 2 options: get the current location or get the address as typed
+      // querySelector is similar to get element by id. It is a build in functionality of javascript. Queryselecter can be doen with anything that is a class or id in the css                
+      const address = document.querySelector('#searchBox').value
+      const user_location = currentLocation(address)
+
+      // ****************** From the user_location get the position coordinates ***********************
+
+      user_location.then(position => {
+        // after we get the position coordinates we center the map to that place.
+        map.setCenter(position)
+        // send the request to our server API
+        const api_url = `/api/v1/bikes?country=ie`
+        // options is just a variable name here for storing the http protocol. TIP from Xiang: MDN webdocs: Follow tutorial on HTTP protocol
+        const protocol_options = {
+          method: 'GET',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          }
+        }
+
+        // ****************** Function that fetches bike data from the server **************************
+        // we add the api_url and the protocol_options. Read basic concepts on developer.mozilla.org
+        // You can use the chrome extension Restlet client for REST API testing here
+
+        fetch(api_url, protocol_options)
+          .then(bikes => bikes.json())
+          .then(bikes => {
+            // features is used as array in GEO JSON is an array and each element respresents a station
+            // geojson.org describes more about this
+            // you can add any property you like.
+            // start with official documentation. They provide the links with complete descriptions.
+            // try to figure out how to run the example on the local machine first
+            // have a high overview of how the code works and than change
+            // station is the on element of the bikes array with features
+            for (station of bikes.features) {
+              //for each one station. des is destination here // changed it now to destination
+              //ex. station.currently.time
+              // station.forecast.time
+              const destination = {
+                lat: station.geometry.coordinates[0],
+                lng: station.geometry.coordinates[1]
+              }
+              // position is our current position or the typed address. destination is the coordinate for the station
+
+              if (distanceWithin(position, destination, 10000)) {
+                // check out sementic ui documentation for adding extra steps
+                //calculates how the distance from the source and destination. within 1 km.
+                // creates the markers. We create a new instance for the markers and bind it to the map
+                // google uses LatLng constructor
+                const latLng = new google.maps.LatLng(destination.lat, destination.lng)
+                // constant marker, new instance of marker
+                const marker = new google.maps.Marker({
+                  position: latLng, //coordinates
+                  map: map, // we put a map over the map
+                  info: station.properties // include our properties. info is the name that we gave there.
+                })
+              }
+            }
+          })
+      })
+    }
+    // We need to start the server to show the markers on the map.
+    // We need to install something for now untill we have a script to start it. NodeJs is easiest. 
+    // Not anymore needed now we changed the server settings and implemented it on our Flask app
+
+    function distanceWithin(source, destination, range) {
+      const toRadians = degree => {
+        return degree * (Math.PI / 180)
       }
 
-      function search() {
-// creates the onclick even of the search button
-// 2 options: get the current location or get the address as typed
-// querySelector is similar to get element by id .
-// build in functionality of javascript. Queryselecter can be doen with anything that is a class or id in the css
-        const address = document.querySelector('#searchBox').value
-        const current = currentLocation(address)
-// VS trick: cursor on currentLocation and press command and you will find the connected element definition
-// current then get the position
+      const theta1 = toRadians(source.lat)// src changed to source, don't get the logic of the name and the meaning yet.
+      const theta2 = toRadians(destination.lat)// should this one not ben source.lng?
+      const delta1 = toRadians(destination.lat - source.lat)
+      const delta2 = toRadians(destination.lng - source.lng)
 
-        current.then(pos => {
-          //after we get the position we center the map to that place.
-          map.setCenter(pos)
-          //send the request to our server API
-          const url = `/api/v1/bikes?country=ie`
-          //during testing we disable the cache to get only new latest data
-                    // options is just a variable name here for storing the http protocol :
-                    // TIP from Xiang: MDN webdocs: Follow tutorial on HTTP protocol
-          const options = {
+      const R = 6371e3 // What is this number?
+      const a =
+        Math.pow(Math.sin(delta1 / 2), 2) +
+        Math.cos(theta1) *
+        Math.cos(theta2) *
+        Math.pow(Math.sin(delta2 / 2), 2)
+
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+      const distance = R * c
+
+      if (distance <= range) {
+        return true
+      }
+
+      return false
+    }
+
+    function currentLocation(address) {
+      return new Promise((resolve, reject) => {
+        if ('geolocation' in navigator && address === '') {
+          navigator.geolocation.getCurrentPosition(position => {
+            resolve({ lat: position.coords.latitude, lng: position.coords.longitude })
+          })
+        } else {
+          const api_url = `/api/v1/coordinates?city=${address}&country=ie`
+          const protocol_options = {
             method: 'GET',
             cache: 'no-cache',
             headers: {
@@ -88,111 +182,18 @@
               Accept: 'application/json'
             }
           }
-          // JS function that feteches data form the server
-          // we add the api url and the options
-          // Fetch basic concepts from developer.mozilla.org
-          // Add chrome extension Restlet client for REST API testing
 
-          fetch(url, options)
-            .then(bikes => bikes.json())
-            .then(bikes => {
-              // bikes returned from the server
-              // features is used as array in GEO JSON is an array and each element respresents a station
-              // geojson.org describes more about this
-              // you can add any property you like.
-              // start with official documentation. They provide the links with complete descriptions.
-              // try to figure out how to run the example on the local machine first
-              // have a high overview of how the code works and than change
-              // station is the on element of the bikes array with features
-              for (station of bikes.features) {
-                //for each one station. des is destination here
-                                   //ex. station.currently.time
-                                    // station.forecast.time
-                const des = {
-                  lat: station.geometry.coordinates[0],
-                  lng: station.geometry.coordinates[1]
-                }
-                // position is our current position or the typed address. destination is the coordinate for the station
-
-                if (distanceWithin(pos, des, 10000)) {
-                // check out sementic ui documentation for adding extra steps
-                //calculates how the distance from the source and destination. within 1 km.
-                // creates the markers. We create a new instance for the markers and bind it to the map
-                // google uses LatLng constructor
-                  const latLng = new google.maps.LatLng(des.lat, des.lng)
-                  // constant marker, new instance of marker
-                  const marker = new google.maps.Marker({
-                    position: latLng, //coordinates
-                    map: map, // we put a map over the map
-                    info: station.properties // include our properties. info is the name that we gave there.
-                  })
-                }
-              }
+          fetch(api_url, protocol_options)
+            .then(coords => coords.json())
+            .then(coords => {
+              resolve({ lat: coords[0].lat, lng: coords[0].lon })
             })
-        })
-      }
-// We need to start the server to show the markers on the map.
-// We need to install something for now untill we have a script to start it.
-// NodeJs is easiest
-
-      function distanceWithin(src, des, range) {
-        const toRadians = degree => {
-          return degree * (Math.PI / 180)
         }
+      })
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&callback=initMap"
+    async defer></script>
+</body>
 
-        const theta1 = toRadians(src.lat)
-        const theta2 = toRadians(des.lat)
-        const delta1 = toRadians(des.lat - src.lat)
-        const delta2 = toRadians(des.lng - src.lng)
-
-        const R = 6371e3
-        const a =
-          Math.pow(Math.sin(delta1 / 2), 2) +
-          Math.cos(theta1) *
-            Math.cos(theta2) *
-            Math.pow(Math.sin(delta2 / 2), 2)
-
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-
-        const distance = R * c
-
-        if (distance <= range) {
-          return true
-        }
-
-        return false
-      }
-
-      function currentLocation(address) {
-        return new Promise((resolve, reject) => {
-          if ('geolocation' in navigator && address === '') {
-            navigator.geolocation.getCurrentPosition(pos => {
-              resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude })
-            })
-          } else {
-            const url = `/api/v1/coordinates?city=${address}&country=ie`
-            const options = {
-              method: 'GET',
-              cache: 'no-cache',
-              headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-              }
-            }
-
-            fetch(url, options)
-              .then(coords => coords.json())
-              .then(coords => {
-                resolve({ lat: coords[0].lat, lng: coords[0].lon })
-              })
-          }
-        })
-      }
-    </script>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYYR8CVCvuGOzdM-wHwk9qLIBn8WLN5I&callback=initMap"
-      async
-      defer
-    ></script>
-  </body>
 </html>
