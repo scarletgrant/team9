@@ -3,7 +3,6 @@
  * @module geo
  */
 
-const process = require('process')
 const https = require('https')
 const queryString = require('querystring')
 const env = require('./env')
@@ -86,7 +85,7 @@ const search = (city, country, opts) => {
      */
     autocomplete: opts.autocomplete || true,
     country: country,
-    access_token: env.env().geoToken,
+    access_token: env.env().token.geo,
     /**
      * Optional properties
      */
