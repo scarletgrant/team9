@@ -6,7 +6,6 @@
  * forecast - A function returns forecast weather
  */
 
-const process = require('process')
 const geo = require('./geo')
 const https = require('https')
 const queryString = require('querystring')
@@ -33,7 +32,7 @@ const search = (lat, lon, opts) => {
   const options = {
     hostname: 'api.darksky.net',
     path: `/forecast/${
-      env.env().weatherToken
+      env.env().token.weather
     }/${lat},${lon}?${queryString.stringify(query)}`,
     method: 'GET',
     headers: {
@@ -131,7 +130,7 @@ const forecast = (city, country) => {
             resolve(data)
           })
           .catch(err => {
-            throw new Error(err)
+            console.error(err)
           })
       })
       .catch(err => {

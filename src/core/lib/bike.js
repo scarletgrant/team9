@@ -3,7 +3,6 @@
  * @module bike
  */
 
-const process = require('process')
 const https = require('https')
 const queryString = require('querystring')
 const env = require('./env')
@@ -45,7 +44,7 @@ const cache = {}
 const search = country => {
   const query = {
     contract: '',
-    apiKey: env.env().bikeToken
+    apiKey: env.env().token.bike
   }
 
   const options = {
@@ -120,7 +119,7 @@ const search = country => {
 
 const contracts = () => {
   const query = {
-    apiKey: env.env().bikeToken
+    apiKey: env.env().token.bike
   }
 
   const options = {
@@ -200,12 +199,14 @@ const geoJSON = stations => {
         coordinates: [station.position.lat, station.position.lng]
       },
       properties: {
+        number: station.number,
         banking: station.banking,
         bonus: station.bonus,
         bike_stands: station.bike_stands,
         available_bike_stands: station.available_bike_stands,
         available_bikes: station.available_bikes,
-        status: station.status
+        status: station.status,
+        last_update: station.last_update
       }
     })
   }

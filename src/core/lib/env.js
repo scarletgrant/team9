@@ -27,13 +27,22 @@ const env = () => {
   })
 
   return {
-    username: table.get('DB_USERNAME'),
-    passwd: table.get('DB_PASSWD'),
-    database: table.get('DB_NAME'),
-    host: table.get('DB_HOST'),
-    geoToken: table.get('GEO_TOKEN'),
-    weatherToken: table.get('WEATHER_TOKEN'),
-    bikeToken: table.get('BIKE_TOKEN')
+    db: {
+      username: table.get('DB_USERNAME'),
+      passwd: table.get('DB_PASSWD'),
+      database: table.get('DB_NAME'),
+      host: table.get('DB_HOST'),
+      port: table.get('DB_PORT')
+    },
+    token: {
+      geo: table.get('GEO_TOKEN'),
+      weather: table.get('WEATHER_TOKEN'),
+      bike: table.get('BIKE_TOKEN')
+    },
+    ml: {
+      host: table.get('ML_HOST'),
+      port: table.get('ML_PORT')
+    }
   }
 }
 
