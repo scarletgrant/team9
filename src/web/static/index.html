@@ -11,6 +11,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <style>
       #mapBox {
         position: relative;
@@ -34,18 +35,14 @@
         min-width: 100%; */
       }
 
-      #currentWeatherWidget {
-        margin: 1em 1em;
-      }
-
-      #forecastWidget {
-        margin: 1em 1em;
+      #weatherWidget {
+        margin: 1em 0;
       }
     </style>
   </head>
   <body>
     <div class="ui grid">
-      <div class="six wide column">
+      <div class="six wide column" id="weatherWidget">
         <div class="container" id="currentWeatherWidget">
           <script
             type="text/javascript"
@@ -53,10 +50,7 @@
           ></script>
         </div>
         <div class="container" id="forecastWidget">
-          <script
-            type="text/javascript"
-            src="https://darksky.net/widget/graph/53.3498,-6.2603/ca12/en.js?width=100%&height=320&title=dublin&textColor=333333&bgColor=FFFFFF&transparency=false&fontFamily=Default&customFont=&units=ca&graph=temperature_graph&timeColor=333333&tempColor=333333&lineColor=333333&markerColor=333333"
-          ></script>
+          <canvas id="predChart"> </canvas>
         </div>
       </div>
       <div class="ten wide column" id="mapBox">
@@ -75,12 +69,14 @@
     <script>
       let map = null
 
+      // Get the permission from the user
       function getCurrentPositionPermission() {
         currentLocation().then(pos => {
           return pos
         })
       }
 
+      // Initialize the map on the web page
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: { lat: 53.35014, lng: -6.266155 },
@@ -303,10 +299,12 @@
         })
       }
 
+      // Send the search request to the backend server
       function search() {
         const address = document.querySelector('#searchBox').value
         const current = currentLocation(address)
 
+        // Get current location
         current.then(pos => {
           map.setCenter(pos)
           const url = `/api/v1/bikes?country=ie`
@@ -321,6 +319,7 @@
 
           let lastWindow = null
 
+          // Send request to backend server to fetch the station data
           fetch(url, options)
             .then(bikes => bikes.json())
             .then(bikes => {
@@ -330,6 +329,7 @@
                   lng: station.geometry.coordinates[1]
                 }
 
+                // Check the distance between two points
                 if (distanceWithin(pos, des, 10000)) {
                   const latLng = new google.maps.LatLng(des.lat, des.lng)
                   const marker = new google.maps.Marker({
@@ -342,6 +342,7 @@
                     info: station.properties
                   })
 
+                  // Send request to fetch the trained data
                   marker.addListener('click', event => {
                     fetch(
                       `/api/v1/pred?number=${
@@ -358,6 +359,7 @@
                     )
                       .then(pred => pred.json())
                       .then(pred => {
+                        console.log(pred)
                         const options = [
                           {
                             label: 'Total',
@@ -373,6 +375,7 @@
                           }
                         ]
 
+                        // Add info window to each marker
                         const content = buildPopup(options)
                         const infoWindow = new google.maps.InfoWindow({
                           content: content
@@ -394,11 +397,13 @@
         })
       }
 
+      // Generate Popup HTMML code to show the available data after clicking each station
       function buildPopup(options) {
         let div = document.createElement('div')
         div.classList.add('ui')
         div.classList.add('statistics')
 
+        // Add each property of the object to popup
         for (const statInfo of options) {
           let stat = document.createElement('div')
           stat.classList.add(['statistic'])
@@ -420,6 +425,7 @@
         return div.outerHTML
       }
 
+      // Checking if the coordinate is within the given range
       function distanceWithin(src, des, range) {
         const toRadians = degree => {
           return degree * (Math.PI / 180)
@@ -448,6 +454,7 @@
         return false
       }
 
+      // Get current location from the user
       function currentLocation(address) {
         return new Promise((resolve, reject) => {
           if ('geolocation' in navigator && address === '') {

@@ -17,7 +17,7 @@ const start = port => {
 
   server.listen(port)
 
-  // addBikeStationRoutine(10 * 1000)
+  addBikeStationRoutine(10 * 1000)
   // addWeatherRoutine(10 * 1000)
 }
 
@@ -52,6 +52,12 @@ const get = (req, res) => {
     returnHomePage(req, res)
   }
 }
+
+/**
+ * Return home page(index.html)
+ * @param {InComingMessage} req - The incmoning request
+ * @param {ServerResponse} res - The response
+ */
 
 const returnHomePage = (req, res) => {
   const home = fs.readFileSync('./index.html')
@@ -117,6 +123,11 @@ const getWeatherForecast = (req, res) => {
     })
 }
 
+/**
+ * Return current weather
+ * @param {IncomingMessage} req
+ * @param {ServerResponse} res
+ */
 const getWeatherCurrent = (req, res) => {
   const city = url.parse(req.url, true).query.city
   const country = url.parse(req.url, true).query.country
@@ -152,6 +163,11 @@ const getCoords = (req, res) => {
   })
 }
 
+/**
+ * Return current information about of bike station
+ * @param {IncomingMessage} req
+ * @param {ServerResponse} res
+ */
 const getBikes = (req, res) => {
   const country = url.parse(req.url, true).query.country
 
@@ -167,6 +183,11 @@ const getBikes = (req, res) => {
     })
 }
 
+/**
+ * Create a new doc in the database
+ * @param {Any} dbInstance
+ * @param {Object} options
+ */
 const createDoc = (dbInstance, options) => {
   dbInstance.put(`/${options.db}/${options.id}`, options.data).then(res => {
     return {
@@ -178,6 +199,11 @@ const createDoc = (dbInstance, options) => {
   })
 }
 
+/**
+ * Update an existing doc in the database
+ * @param {Any} dbInstance
+ * @param {Object} options
+ */
 const updateDoc = (dbInstance, options) => {
   dbInstance
     .head(`/${options.db}/${options.id}`)
@@ -197,6 +223,11 @@ const updateDoc = (dbInstance, options) => {
     })
 }
 
+/**
+ * Run every interval milesecond
+ * Add bike station data to the database
+ * @param {Integer} interval
+ */
 const addBikeStationRoutine = interval => {
   setInterval(() => {
     fetch.bike
@@ -237,6 +268,10 @@ const addBikeStationRoutine = interval => {
   }, interval)
 }
 
+/**
+ * Add weather forecast every interval milesecond
+ * @param {Integer} interval
+ */
 const addWeatherRoutine = interval => {
   setInterval(() => {
     fetch.weather

@@ -1,13 +1,13 @@
-FROM node:current-alpine
+FROM python
 
 WORKDIR /app
 
 COPY . /app
 
-RUN npm install
-
 # Make port 80 available to the world outside this container
-EXPOSE 8000
+EXPOSE 80
+
+RUN pip install aiohttp
 
 # Run app.py when the container launches
-CMD ["npm", "start"]
+CMD ["python", "app.py"]

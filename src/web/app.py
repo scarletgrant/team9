@@ -4,7 +4,7 @@ from json import loads
 
 routes = web.RouteTableDef()
 
-
+# Return index.html when a user visits the website
 @routes.get('/')
 async def home(request):
     with open('./static/index.html', encoding='utf8') as f:
@@ -12,7 +12,7 @@ async def home(request):
 
         return web.Response(content_type='text/html', text=content)
 
-
+# handler the prediction request
 @routes.get('/api/v1/pred')
 async def forecastPred(request):
     number = request.query['number']
@@ -31,6 +31,7 @@ async def forecastPred(request):
             return web.json_response(loads(res_data))
 
 
+# handle the weather forecast request
 @routes.get('/api/v1/forecast')
 async def forecast(request):
     city = request.query['city']
@@ -47,6 +48,7 @@ async def forecast(request):
             return web.json_response(loads(res_data))
 
 
+# handle the request to return the bike station information
 @routes.get('/api/v1/bikes')
 async def station(request):
     country = request.query['country']
@@ -61,6 +63,7 @@ async def station(request):
             return web.json_response(loads(res_data))
 
 
+# handle to request to return coordinates request
 @routes.get('/api/v1/coordinates')
 async def coords(request):
     city = request.query['city']
@@ -77,6 +80,8 @@ async def coords(request):
 
             return web.json_response(loads(res_data))
 
+# read environment variables from .env file
+
 
 def env():
     with open('.env') as f:
@@ -92,6 +97,7 @@ def env():
         return env
 
 
+# Start the web application
 app = web.Application()
 app.add_routes(routes)
-web.run_app(app)
+web.run_app(app, port=80)

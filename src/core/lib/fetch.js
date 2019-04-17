@@ -13,7 +13,6 @@
 const geo = require('./geo')
 const weather = require('./weather')
 const bike = require('./bike')
-const distance = require('./distance')
 const environment = require('./env')
 
 module.exports = {
@@ -22,9 +21,6 @@ module.exports = {
   bike: {
     search: bike.search,
     cache: bike.cache
-  },
-  distance: {
-    coordsInRange: distance.coordsInRange
   },
   env: environment.env
 }
