@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>Dublin Bike</title>
     <!-- <link rel="stylesheet" href="style.css" /> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link
@@ -13,69 +13,193 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <style>
-      #mapBox {
-        position: relative;
-      }
-
       #map {
-        min-height: 100%;
         min-width: 100%;
-      }
-
-      #mapBar {
-        margin: 1em 1em;
-      }
-
-      #searchBar {
-        /* position: absolute;
-        top: 1em;
-        right: 1em; */
-        margin: 1em 1em;
-        /* z-index: 2;
-        min-width: 100%; */
-      }
-
-      #weatherWidget {
-        margin: 1em 0;
+        min-height: 100%;
       }
     </style>
   </head>
   <body>
-    <div class="ui grid">
-      <div class="six wide column" id="weatherWidget">
-        <div class="container" id="currentWeatherWidget">
-          <script
-            type="text/javascript"
-            src="https://darksky.net/widget/graph-bar/53.3498,-6.2603/ca12/en.js?width=100%&height=350&title=Full Forecast&textColor=333333&bgColor=FFFFFF&transparency=false&skyColor=undefined&fontFamily=Default&customFont=&units=ca&timeColor=333333&tempColor=333333&currentDetailsOption=true"
-          ></script>
-        </div>
-        <div class="container" id="forecastWidget">
-          <canvas id="predChart"> </canvas>
-        </div>
-      </div>
-      <div class="ten wide column" id="mapBox">
-        <div class="row">
-          <div class="ui action fluid input" id="searchBar">
-            <input type="text" placeholder="Search..." id="searchBox" />
-            <button class="ui button" onclick="search()">Search</button>
+    <div class="ui stackable grid">
+      <div class="row">
+        <div class="six wide column" id="sidebar">
+          <div class="ui segments">
+            <div class="ui segment">
+              <div class="ui fluid card">
+                <div class="content">
+                  <div class="ui header">
+                    <div class="content">
+                      Bike Planner
+                    </div>
+                  </div>
+                  <p>
+                    Bike Planner is a web application which could provide real
+                    time bikes and bikes prediction information for the user. It
+                    helps users find the nearest bike station and show related
+                    information for that station
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="ui segment">
+              <div class="ui fluid card">
+                <div class="content">
+                  <div class="ui header">
+                    <div class="content">
+                      The Developers
+                    </div>
+                  </div>
+                </div>
+
+                <div class="content">
+                  <div class="ui horizontal list">
+                    <div class="item">
+                      <img
+                        class="ui avatar image"
+                        src="https://avatars.dicebear.com/v2/avataaars/wwwer.svg"
+                      />
+                      <div class="content">
+                        <div class="header">Scarlet Grant</div>
+                        Scrum Master
+                      </div>
+                    </div>
+                    <div class="item">
+                      <img
+                        class="ui avatar image"
+                        src="https://avatars.dicebear.com/v2/avataaars/bnhgfrt.svg"
+                      />
+                      <div class="content">
+                        <div class="header">Jiarui Qin</div>
+                        Developer
+                      </div>
+                    </div>
+                    <div class="item">
+                      <img
+                        class="ui avatar image"
+                        src="https://avatars.dicebear.com/v2/avataaars/fgwe.svg"
+                      />
+                      <div class="content">
+                        <div class="header">Xiang Zhao</div>
+                        Developer
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="row" id="mapBar">
+        <div class="ten wide column">
           <div id="map"></div>
         </div>
       </div>
     </div>
 
+    <template id="ItemTemplate">
+      <div class="ui segment">
+        <div class="ui grid">
+          <div class="three wide column"><i class="icon" id="icon"></i></div>
+          <div class="three wide column"><i class="icon" id="status"></i></div>
+          <div class="ten wide column"><i id="desc"></i></div>
+        </div>
+      </div>
+    </template>
+
+    <template id="infoCard">
+      <div class="ui card">
+        <div class="content">
+          <div class="header" id="address"></div>
+        </div>
+        <div class="content">
+          <div class="ui segments" id="items"></div>
+        </div>
+      </div>
+    </template>
+
     <script>
       let map = null
+      let markers = new Map()
+      let source = null
+      let des = null
 
-      // Get the permission from the user
-      function getCurrentPositionPermission() {
-        currentLocation().then(pos => {
-          return pos
-        })
+      class InfoItem extends HTMLElement {
+        constructor() {
+          super()
+
+          this.root = this.attachShadow({ mode: 'open' })
+          const template = document
+            .querySelector('#ItemTemplate')
+            .cloneNode(true)
+
+          this.root.appendChild(template.content)
+        }
+
+        attributeChangedCallback(name, oldName, newName) {
+          let template = this.root.querySelector('div')
+          let icon = null
+          let status = null
+          let desc = null
+
+          if (name === 'icon') {
+            icon = newName
+            template.querySelector('#icon').setAttribute('class', icon)
+            template.querySelector('#icon').classList.add('icon')
+          } else if (name === 'status') {
+            status = newName
+
+            if (status === 'true') {
+              template.querySelector('#status').classList.add('check')
+              template.querySelector('#status').classList.add('icon')
+            } else if (status === 'false') {
+              template.querySelector('#status').classList.add('close')
+              template.querySelector('#status').classList.add('icon')
+            } else {
+              template.querySelector('#status').textContent = status
+            }
+          } else if (name === 'desc') {
+            desc = newName
+            template.querySelector('#desc').textContent = desc
+          }
+        }
+
+        static get observedAttributes() {
+          return ['icon', 'status', 'desc']
+        }
       }
 
+      customElements.define('info-item', InfoItem)
+
+      function buildInfoCard(marker, options) {
+        let infoCard = document.querySelector('#infoCard').cloneNode(true)
+        for (const item of options.items) {
+          let itemEle = document.createElement('info-item')
+          itemEle.setAttribute('icon', item.icon)
+          itemEle.setAttribute('status', item.status)
+          itemEle.setAttribute('desc', item.desc)
+
+          infoCard.content
+            .querySelector('#items')
+            .appendChild(itemEle.shadowRoot.querySelector('div'))
+        }
+
+        const startNav = document.createElement('button')
+        startNav.classList.add('ui')
+        startNav.classList.add('fluid')
+        startNav.classList.add('secondary')
+        startNav.classList.add('button')
+        startNav.textContent = 'Start'
+        startNav.setAttribute('onclick', setSource(marker))
+
+        infoCard.content.querySelector('#items').appendChild(startNav)
+
+        return infoCard.content
+      }
+
+      function setSource(marker) {
+        console.log(marker)
+      }
+
+      window.addEventListener('DOMContentLoaded', showMarkers)
       // Initialize the map on the web page
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -299,186 +423,108 @@
         })
       }
 
-      // Send the search request to the backend server
-      function search() {
-        const address = document.querySelector('#searchBox').value
-        const current = currentLocation(address)
+      function buildMarkerIcon(options) {
+        if (options.available_bike_stands < 10) {
+          let icon = document.createElement('i')
+          icon.classList.add(['map', 'marker', 'red', 'icon'])
 
-        // Get current location
-        current.then(pos => {
-          map.setCenter(pos)
-          const url = `/api/v1/bikes?country=ie`
-          const options = {
-            method: 'GET',
-            cache: 'no-cache',
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json'
-            }
-          }
+          return icon
+        } else if (
+          options.available_bike_stands >= 10 &&
+          options.available_bike_stands <= 20
+        ) {
+          let icon = document.createElement('i')
+          icon.classList.add(['map', 'marker', 'yello', 'icon'])
 
-          let lastWindow = null
+          return icon
+        } else {
+          let icon = document.createElement('i')
+          icon.classList.add(['map', 'marker', 'green', 'icon'])
 
-          // Send request to backend server to fetch the station data
-          fetch(url, options)
-            .then(bikes => bikes.json())
-            .then(bikes => {
-              for (station of bikes.features) {
-                const des = {
-                  lat: station.geometry.coordinates[0],
-                  lng: station.geometry.coordinates[1]
-                }
+          return icon
+        }
+      }
 
-                // Check the distance between two points
-                if (distanceWithin(pos, des, 10000)) {
-                  const latLng = new google.maps.LatLng(des.lat, des.lng)
+      function showMarkers() {
+        const contract_name = 'dublin'
+        const apiKey = '92be62130be380ad2925b05fc3b1e5b3ef1a5a55'
+        const url = `https://api.jcdecaux.com/vls/v1/stations?contract=${contract_name}&apiKey=${apiKey}`
+
+        fetch(url)
+          .then(data => data.json())
+          .then(data => {
+            for (const station of data) {
+              fetch(
+                '/api/v1/pred?city=dublin&country=ie&number=' + station.number
+              )
+                .then(data => data.json())
+                .then(data => {
                   const marker = new google.maps.Marker({
-                    position: latLng,
+                    position: new google.maps.LatLng(
+                      station.position.lat,
+                      station.position.lng
+                    ),
                     map: map,
                     label: {
-                      color: 'white',
-                      text: '' + station.properties.available_bike_stands
+                      fontFamily: 'Fontawesome',
+                      text: '\uf192', //code for font-awesome icon
+                      fontSize: '15px',
+                      color: 'red'
                     },
-                    info: station.properties
+                    properties: {
+                      number: station.number,
+                      address: station.address,
+                      banking: station.banking,
+                      bonus: station.bonus,
+                      status: station.status,
+                      bike_stands: station.bike_stands,
+                      available_bike_stands: station.available_bike_stands,
+                      avaliable_bikes: station.avaliable_bikes,
+                      last_update: station.last_update,
+                      forecast: data.pred[0]
+                    }
                   })
 
-                  // Send request to fetch the trained data
-                  marker.addListener('click', event => {
-                    fetch(
-                      `/api/v1/pred?number=${
-                        marker.info.number
-                      }&city=dublin&country=ie`,
+                  const options = {
+                    items: [
                       {
-                        method: 'GET',
-                        cache: 'no-cache',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          Accept: 'application/json'
-                        }
+                        icon: 'bicycle',
+                        status: station.available_bikes,
+                        desc: 'Avaliable Bikes'
+                      },
+                      {
+                        icon: 'clock',
+                        status: parseInt(data.pred[0]),
+                        desc: 'Next Hour'
+                      },
+                      {
+                        icon: 'lock',
+                        status: station.available_bike_stands,
+                        desc: 'Avaliable Stands'
+                      },
+                      {
+                        icon: 'credit card outline',
+                        status: '' + station.banking,
+                        desc: 'Pay in Card'
                       }
-                    )
-                      .then(pred => pred.json())
-                      .then(pred => {
-                        console.log(pred)
-                        const options = [
-                          {
-                            label: 'Total',
-                            value: marker.info.bike_stands
-                          },
-                          {
-                            label: 'Ava',
-                            value: marker.info.available_bike_stands
-                          },
-                          {
-                            label: 'Pred',
-                            value: parseInt(pred.pred)
-                          }
-                        ]
+                    ]
+                  }
 
-                        // Add info window to each marker
-                        const content = buildPopup(options)
-                        const infoWindow = new google.maps.InfoWindow({
-                          content: content
-                        })
-
-                        if (lastWindow !== null) {
-                          lastWindow.close()
-                          lastWindow = null
-                        }
-
-                        infoWindow.open(map, marker)
-
-                        lastWindow = infoWindow
-                      })
+                  const infoWindow = new google.maps.InfoWindow({
+                    content: buildInfoCard(marker, options).querySelector('div')
+                      .innerHTML
                   })
-                }
-              }
-            })
-        })
-      }
 
-      // Generate Popup HTMML code to show the available data after clicking each station
-      function buildPopup(options) {
-        let div = document.createElement('div')
-        div.classList.add('ui')
-        div.classList.add('statistics')
-
-        // Add each property of the object to popup
-        for (const statInfo of options) {
-          let stat = document.createElement('div')
-          stat.classList.add(['statistic'])
-
-          let statValue = document.createElement('div')
-          statValue.classList.add(['value'])
-          statValue.textContent = statInfo.value
-
-          let statLabel = document.createElement('div')
-          statLabel.classList.add('label')
-          statLabel.textContent = statInfo.label
-
-          stat.appendChild(statValue)
-          stat.appendChild(statLabel)
-
-          div.appendChild(stat)
-        }
-
-        return div.outerHTML
-      }
-
-      // Checking if the coordinate is within the given range
-      function distanceWithin(src, des, range) {
-        const toRadians = degree => {
-          return degree * (Math.PI / 180)
-        }
-
-        const theta1 = toRadians(src.lat)
-        const theta2 = toRadians(des.lat)
-        const delta1 = toRadians(des.lat - src.lat)
-        const delta2 = toRadians(des.lng - src.lng)
-
-        const R = 6371e3
-        const a =
-          Math.pow(Math.sin(delta1 / 2), 2) +
-          Math.cos(theta1) *
-            Math.cos(theta2) *
-            Math.pow(Math.sin(delta2 / 2), 2)
-
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-
-        const distance = R * c
-
-        if (distance <= range) {
-          return true
-        }
-
-        return false
-      }
-
-      // Get current location from the user
-      function currentLocation(address) {
-        return new Promise((resolve, reject) => {
-          if ('geolocation' in navigator && address === '') {
-            navigator.geolocation.getCurrentPosition(pos => {
-              resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude })
-            })
-          } else {
-            const url = `/api/v1/coordinates?city=${address}&country=ie`
-            const options = {
-              method: 'GET',
-              cache: 'no-cache',
-              headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-              }
+                  marker.addListener('click', () => {
+                    infoWindow.open(map, marker)
+                  })
+                  markers.set(data.number, marker)
+                })
             }
-
-            fetch(url, options)
-              .then(coords => coords.json())
-              .then(coords => {
-                resolve({ lat: coords[0].lat, lng: coords[0].lon })
-              })
-          }
-        })
+          })
+          .catch(err => {
+            throw new Error(err)
+          })
       }
     </script>
     <script
