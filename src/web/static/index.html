@@ -518,7 +518,7 @@
                   marker.addListener('click', () => {
                     if (current !== null) {
                       const direct = new google.maps.DirectionsService()
-                      const render = new google.maps.DirectionsRenderer()
+                      let render = new google.maps.DirectionsRenderer()
                       render.setMap(map)
                       direct.route(
                         {
