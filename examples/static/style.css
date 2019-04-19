@@ -1,0 +1,322 @@
+/*------------CHANGE LOG---------------*/
+
+/* Changed code footer
+
+*/
+
+/*------------INTRO---------------*/
+
+/*
+
+    *   Excessive commenting is used to support beginners coding and show of understanding.
+
+    *   This stylesheet explores with responsive layouts. It is opportune to develop this     further for different screensizes.
+
+    *   This CSS sheet explores the SMACSS structure: Scalable and Modular Architecture       for CSS. For more info: https://smacss.com/
+
+    *	The following structure has been created in the style sheet:
+
+        BASE; kept simple now, but could be structured as skin_base
+        LAYOUT; includes a grid in this case
+        MODULES; all modulair, reusable classes
+        STATES; this includes all interactivity
+        THEME; this includes all coloring. This way, the theme colors could be easily adjusted.
+        SHAME/ (P)RESERVED); This section is added by author for temporary stuff that could be better organized another time.
+
+    *   CSS Validation at https://jigsaw.w3.org/css-validator/validator
+        Last CSS validation check point:
+        2018-01-01-9:45
+
+        */
+
+/* ------------BASE-------------------*/
+
+/* base skin */
+
+html {
+  font-family: Helvetica Neue, Helvetica, Arial;
+  font-size: 16px;
+  margin: 0px;
+  height: 100%;
+}
+
+body {
+  margin: 0px;
+  min-height: 100%;
+  position: relative;
+  padding-bottom: [footer-height];
+}
+
+/* -----------LAYOUT------------------*/
+
+/*Box-sizing-property makes sure that the padding and border are included in the total width and height of the elements.*/
+
+* {
+  box-sizing: border-box;
+}
+
+/* Main (super)grid that covers entire page.
+    More info on grids can be found here: https://drafts.csswg.org/css-grid/#grid-containers*/
+
+/* Responsive layout - Mobile, Tablets vs Desktops -
+    Makes the navigation_bar stack on top of left side bar for mobile and tablet devices..
+    On mobile devices the Gadgets section is located below the main content.*/
+
+/* Grid can be adjusted anytime. Extra sub-grids can be added within gridcells.
+    Responsive @media queries can be further explored at https://www.w3schools.com/css/css_rwd_mediaqueries.asp
+
+    /* Responsive layout - makes a two column-layout instead of four columns */
+
+/*Mobile*/
+
+@media screen and (max-width: 620px) {
+  .grid-super {
+    display: grid;
+    grid-template-areas: 'grid-super_header' 'grid-super_middle' 'grid-super_left' 'grid-super_right_header' 'grid-super_right' 'grid-super_footer';
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 1fr 1fr 50px 1fr 50px;
+  }
+  .column {
+    width: 100%;
+  }
+}
+
+/* Tablets */
+
+@media screen and (min-width: 620px) {
+  .grid-super {
+    display: grid;
+    grid-template-areas: 'grid-super_header grid-super_header grid-super_right_header' 'grid-super_middle grid-super_middle grid-super_right' 'grid-super_left grid-super_left grid-super_right' 'grid-super_footer grid-super_footer grid-super_footer';
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 50px 1fr 1fr 50px;
+  }
+}
+
+/*Desktop */
+
+@media screen and (min-width: 800px) {
+  .grid-super {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-areas: 'grid-super_left grid-super_header grid-super_header grid-super_right_header' 'grid-super_left grid-super_middle grid-super_middle grid-super_right' 'grid-super_footer grid-super_footer grid-super_footer grid-super_footer';
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 50px 1fr 50px;
+  }
+  .column {
+    width: 50%;
+  }
+}
+
+.grid-super_left {
+  grid-area: grid-super_left;
+}
+
+.grid-super_header {
+  grid-area: grid-super_header;
+}
+
+.grid-super_right_header {
+  grid-area: grid-super_right_header;
+}
+
+.grid-super_right {
+  grid-area: grid-super_right;
+}
+
+.grid-super_middle {
+  grid-area: grid-super_middle;
+}
+
+.grid-super_footer {
+  grid-area: grid-super_footer;
+  height: 50px;
+}
+
+/* content block layout */
+
+.footer {
+  grid-area: grid-super_footer;
+  text-align: center;
+  height: 50px;
+  padding: 5px 5px 5px 5px;
+  font-size: 12px;
+}
+
+.forecasts {
+  grid-area: grid-super_left;
+  padding: 20px 25px 40px 32px;
+}
+
+.maps-content {
+  grid-area: grid-super_middle;
+  padding: 0px;
+  min-width: 250px;
+  max-width: 800px;
+}
+
+.current_near_available_bikes {
+  grid-area: grid-super_left;
+  padding: 0px 10px 10px 0px;
+  height: auto;
+}
+
+.availability_forecast {
+  grid-area: grid-super_left;
+  padding: 0px 10px 10px 0px;
+  height: auto;
+}
+
+.weather_summary {
+  grid-area: grid-super_left;
+  padding: 0px 10px 10px 0px;
+  height: auto;
+}
+
+/* -----------MODULES--------------- */
+
+/* MAP */
+
+/* Always set the map height explicitly to define the size of the div element that contains the map. */
+
+#map {
+  height: 600px;
+}
+
+/*Inactive navigation-bar used as header. Can be activated when extra pages will be added. */
+
+/*Right Header - currently displaying gAdgets */
+
+.navigation-bar ul,
+.right-header ul {
+  top: 0;
+  width: 100%;
+  height: 50px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: table;
+}
+
+.navigation-bar li,
+.right-header li {
+  display: table-cell;
+  font-size: 18px;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  margin: 0;
+}
+
+/* Table */
+
+table,
+th,
+td {
+  border: 1px solid white;
+  border-collapse: collapse;
+  padding: 5px;
+}
+
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+
+table tr:nth-child(even) {
+  background-color: white;
+}
+
+/* -------------STATE---------------*/
+
+/* The status changes involve color only at this time and are included in Theme section for now.
+    If opportune the state and colors can be seperated in different classes later.
+    Some properties could also be more efficient grouped together.
+    For clear overview and editability it is organized on layout at the moment.
+
+/*-------------THEME----------------*/
+
+/* All colors are grouped in this section to edit quickly if needed */
+
+/* General colors */
+
+p {
+  color: white;
+}
+
+h1 {
+  color: black;
+}
+
+/* Element colors - Organized by grid */
+
+.grid-super_left {
+  color: white;
+}
+
+.forecasts {
+  color: black;
+}
+
+.grid-super_header {
+  background-color: black;
+  color: #fff;
+}
+
+/* Navigation bar coloring - li has no color yet and is commented out but reserved */
+
+.navigation-bar ul {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.navigation-bar a {
+  color: white;
+}
+
+.navigation-bar a:hover {
+  background-color: #222;
+}
+
+.grid-super_right_header {
+  color: white;
+}
+
+/* Right Header - currently displaying gAdgets */
+
+.right-header ul {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.right-header li {
+  color: black;
+}
+
+.grid-super_middle {
+  background-color: #fff;
+  color: black;
+}
+
+.main-content {
+  color: black;
+  background-color: #fff;
+}
+
+.grid-super_footer {
+  color: lightgray;
+  background-color: black;
+}
+
+.footer p {
+  grid-area: grid-super_footer;
+  color: lightgray;
+}
+
+/*-------------SHAME---------------*/
+
+/*-------------(P)RESERVED---------------*/
+
+/*
+
+
+
+
+*/
