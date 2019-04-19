@@ -28,18 +28,7 @@
   <body>
     <div class="ui stackable grid">
       <div class="row">
-        <div class="ten wide column">
-          <div class="row">
-            <div class="ui fluid action input">
-              <input type="text" placeholder="Search..." id="address" />
-              <button class="ui secondary button" onclick="locate()">
-                Search
-              </button>
-            </div>
-          </div>
-          <div id="map"></div>
-        </div>
-        <div class="six wide column" id="sidebar">
+        <div class=" mobile reversed six wide column" id="sidebar">
           <div class="ui segments">
             <div class="ui segment">
               <div class="ui fluid card">
@@ -105,6 +94,18 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="ten wide column">
+          <div class="row">
+            <div class="ui fluid action input">
+              <input type="text" placeholder="Search..." id="address" />
+              <button class="ui secondary button" onclick="locate()">
+                Search
+              </button>
+            </div>
+          </div>
+          <div id="map"></div>
         </div>
       </div>
     </div>
