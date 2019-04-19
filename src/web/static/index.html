@@ -119,6 +119,7 @@
     <script>
       let map = null
       let markers = new Map()
+      let current = null
       let source = null
       let des = null
 
@@ -188,15 +189,16 @@
         startNav.classList.add('secondary')
         startNav.classList.add('button')
         startNav.textContent = 'Start'
-        startNav.setAttribute('onclick', setSource(marker))
+        startNav.setAttribute('onclick', 'setSource();')
 
         infoCard.content.querySelector('#items').appendChild(startNav)
 
         return infoCard.content
       }
 
-      function setSource(marker) {
-        console.log(marker)
+      function setSource() {
+        const marker = current
+        console.log(marker.position)
       }
 
       window.addEventListener('DOMContentLoaded', showMarkers)
@@ -466,10 +468,8 @@
                     ),
                     map: map,
                     label: {
-                      fontFamily: 'Fontawesome',
-                      text: '\uf192', //code for font-awesome icon
-                      fontSize: '15px',
-                      color: 'red'
+                      text: '' + station.available_bikes,
+                      color: 'white'
                     },
                     properties: {
                       number: station.number,
@@ -516,6 +516,31 @@
                   })
 
                   marker.addListener('click', () => {
+                    if (current !== null) {
+                      const direct = new google.maps.DirectionsService()
+                      const render = new google.maps.DirectionsRenderer()
+                      render.setMap(map)
+                      direct.route(
+                        {
+                          origin: current.position,
+                          destination: marker.position,
+                          travelMode: 'BICYCLING'
+                        },
+                        (result, status) => {
+                          if (status === 'OK') {
+                            render.setDirections(result)
+                          }
+                        }
+                      )
+
+                      current = null
+                      if (render != null) {
+                        render.setMap(null)
+                        render = null
+                      }
+                    }
+
+                    current = marker
                     infoWindow.open(map, marker)
                   })
                   markers.set(data.number, marker)
