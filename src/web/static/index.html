@@ -529,15 +529,16 @@
                         (result, status) => {
                           if (status === 'OK') {
                             render.setDirections(result)
+
+                            // if (render != null) {
+                            //   render.setMap(null)
+                            //   render = null
+                            // }
                           }
                         }
                       )
 
                       current = null
-                      if (render != null) {
-                        render.setMap(null)
-                        render = null
-                      }
                     }
 
                     current = marker
