@@ -17,6 +17,12 @@
         min-width: 100%;
         min-height: 100%;
       }
+
+      #searchBar {
+        margin-top: 2em;
+        margin-left: 1em;
+        margin-right: 1em;
+      }
     </style>
   </head>
   <body>
@@ -90,6 +96,14 @@
           </div>
         </div>
         <div class="ten wide column">
+          <div class="row">
+            <div class="ui fluid action input">
+              <input type="text" placeholder="Search..." id="address" />
+              <button class="ui secondary button" onclick="locate()">
+                Search
+              </button>
+            </div>
+          </div>
           <div id="map"></div>
         </div>
       </div>
@@ -108,7 +122,9 @@
     <template id="infoCard">
       <div class="ui card">
         <div class="content">
-          <div class="header" id="address"></div>
+          <div class="ui center aligned header">
+            <div class="content" id="address"></div>
+          </div>
         </div>
         <div class="content">
           <div class="ui segments" id="items"></div>
@@ -120,8 +136,28 @@
       let map = null
       let markers = new Map()
       let current = null
-      let source = null
-      let des = null
+
+      function locate() {
+        const address = document.querySelector('#address').value
+        const geo = new google.maps.Geocoder()
+        geo.geocode(
+          {
+            address: address,
+            componentRestrictions: {
+              country: 'IE'
+            }
+          },
+          (result, status) => {
+            if (status === 'OK') {
+              map.setCenter(result[0].geometry.location)
+              const marker = new google.maps.Marker({
+                map: map,
+                position: result[0].geometry.location
+              })
+            }
+          }
+        )
+      }
 
       class InfoItem extends HTMLElement {
         constructor() {
@@ -172,6 +208,10 @@
 
       function buildInfoCard(marker, options) {
         let infoCard = document.querySelector('#infoCard').cloneNode(true)
+
+        infoCard.content.querySelector('#address').textContent =
+          marker.properties.address
+
         for (const item of options.items) {
           let itemEle = document.createElement('info-item')
           itemEle.setAttribute('icon', item.icon)
@@ -183,22 +223,7 @@
             .appendChild(itemEle.shadowRoot.querySelector('div'))
         }
 
-        const startNav = document.createElement('button')
-        startNav.classList.add('ui')
-        startNav.classList.add('fluid')
-        startNav.classList.add('secondary')
-        startNav.classList.add('button')
-        startNav.textContent = 'Start'
-        startNav.setAttribute('onclick', 'setSource();')
-
-        infoCard.content.querySelector('#items').appendChild(startNav)
-
         return infoCard.content
-      }
-
-      function setSource() {
-        const marker = current
-        console.log(marker.position)
       }
 
       window.addEventListener('DOMContentLoaded', showMarkers)
@@ -515,6 +540,8 @@
                       .innerHTML
                   })
 
+                  marker.properties.infoWindow = infoWindow
+
                   marker.addListener('click', () => {
                     if (current !== null) {
                       const direct = new google.maps.DirectionsService()
@@ -529,11 +556,6 @@
                         (result, status) => {
                           if (status === 'OK') {
                             render.setDirections(result)
-
-                            // if (render != null) {
-                            //   render.setMap(null)
-                            //   render = null
-                            // }
                           }
                         }
                       )
@@ -541,7 +563,6 @@
                       current = null
                     }
 
-                    current = marker
                     infoWindow.open(map, marker)
                   })
                   markers.set(data.number, marker)
