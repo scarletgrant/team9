@@ -7,9 +7,20 @@ Computer Science Conversion Program
 
 **1. Introduction**
 
+The DublinBikes Project is part of the Software Engineering module of the Computer Science conversion course. It is the first group project of the program where the students explore Scrum and agile development methodologies.
+
+Software Engineering (COMP 30830) is a core module on the MSc Computer Science (Conversion) and Higher Diploma in Computer Science Programmes. Software engineering focuses on the processes and techniques fundamental to the creation of reliable, software systems. The module will cover the core concepts and tools used in software engineering. There is a focus on developing sound fundamentals in the areas of requirements engineering, process models, software design, architecture, design patterns and software testing.
+
+The Team has further specified the requirements in several versions of Software Requirement Specifications that were confirmed with the Product Owner. Most of them are mentioned in this report. For the changelog of the requirements and the latest agreed version please refer to the following Appendix:
+
+
 **1.1 Product Scope**
 
-This app is created to remove the friction of biking in Dublin. The app aims to help Dublin Bike users with the following benefits as provided by the client: 
+The BikePlanner Application is a solution to remove all possible friction of biking with DublinBikes, the shared bike scheme run by Dublin City Council. It is build to be a potential extension of the website www.dublinbikes.com. The Application could however be customized and delivered to any other bike sharing scheme provider that offers similar bike data services.
+
+The application helps users finding the nearest bike station to get and return a bike from the bike scheme. It includes a function to predict the availability. This prediction function is delivered as beta feature in version 1 of the application.
+
+The app aims to help Dublin Bike users with the following benefits as provided by the client: 
 
 •Find the best station with available bikes to start a journey 
 
@@ -21,95 +32,95 @@ This app is created to remove the friction of biking in Dublin. The app aims to 
 
 •Include other sources of information
 
+
 **2. Overall description**
 
 **2.1 Product Perspective**
 
-This stand alone app has no affiliations with dublinbikes.ie. The app makes use of JCDecaux bike information API and DarkSky API. See diagram for an overview of the components and interconnections.
+The BikePlanner is an independent, standalone application that collects data from the API’s of JCDecaux and DarkSky to show bike stations, availability and weather. A prediction module analyses the gathered data from the API’s. The site consists of one single main page that displays all functionalities.
+
+There are many applications out there in the market that show the nearest bike stations. Yet, the quality of the user interface is limited and they do not provide prediction features.
+
 
 **2.2 Product Functions**
 
-Show weather-forecast; 
+The application delivers the following functionalities to the user:
 
-Find nearest bike at desired/current location in least amount of clicks; 
+● Find nearest bike at desired/current location in least amount of clicks;
 
-Find nearest dock at desired/current destination in least amount of clicks; 
+● Find nearest dock at desired/current destination in least amount of clicks;
 
-Show forecast of bike availability (at given datetime and location); 
+● Show forecast of bike availability (at given datetime and location);
 
-Show availability for card payments at given location.
+● Show availability for card payments at given location;
 
-Approved adjustments of product briefing: 
+● Show weather-forecast upon opening the app to help the user decide whether to bike or not to bike.
 
-Show weather upon opening the app
 
-The project description of the client informs that the weather only needs to be shown after the  after the station is clicked and shown. However, the team is of the opinion that the user wants to see the weather around him/her or in Dublin before it takes the effort to look up a specific Dublin station. The weather (and/or nearest station) should be visible on opening of the app. This adjustment has been proposed and approved by the Product Owner.
+**2.3 User characteristics**
 
-**2.3 User classes and characteristics**
-
-The user is not expected to have any technical knowledge. The users might be once off users who try out Dublin Biking or they could be frequent users who will rely on the app. It is likely they will use the app mostly on mobile before starting their journey.
+The user is not expected to have any technical knowledge. The users might be once off users who try out DublinBikes or they could be frequent users of the Bike sharing service who will rely on the app every day. It is likely they will use the app mostly on their mobile phone before starting their journey.
 
 **2.4 Operating environment**
 
-Taking the expected usage in consideration, the app will be firstly designed and build for mobile use, with a responsive scheme for larger screen usage. It also should be able to responsive under complex situation. It is supposed to work on any standard internet browser. Future applications could be developed for the Smart Watch and that would not be in the scope of this part of the project.
+Taking the expected usage in consideration, the app is firstly designed and build for mobile use, with a responsive scheme for larger screen usage. It is able to stay responsive under complex situations. It works on any standard internet browser.
 
-**2.5 Contribution to Bike-user**
 
-Offer convenience by friction less biking; 
+**2.5 Constraints**
 
-Show weather-forecast (to bike or not to bike); 
+1. The budget for the hardware devices / servers:
 
-Find nearest bike and dock at destination in least amount of clicks; 
+The application needs to run as lean as possible. Various performance optimization will need to be done to keep cost below 10 Euro a month on Amazon Web Server (AWS)
 
-show predicted bik availability at a given time.
+2. The request limitation set by service providers:
 
-**2.6 Contribution to other stakeholders**
+The API providers such as JCDecaux allow only a maximum amount of requests of 5000 a day. To make the application scalable we need to create a solution to store data so that it can be reused for multiple requests.
 
-Dublin City: stimulate use of their biking scheme by eliminating friction 
-Advertisers: extra channel for green brand awareness
-
-**2.7 User stories**
-
-As a user, I can
-
-open the app and see immediately the weather forecast that has me decide to bike or not to bike;
-
-open the app and see immediately the availability at a particular (preferably the closest) bike station;
-
-view the predicted bike availability at a particular data/time in the future;
-
-open the app and see quickly where I can return my bike;
-
-Open the application and find the nearest bike station.
 
 **3. System features**
 
-**3.1 Assumptions**
+**3.1 Overview functionalities 
 
-User uses mobile phone as primary device to open the app
 
-**3.2 Input**
+Web Application:
 
-The bike information fetched from JCD; 
-The weather information fetched from Dark Sky API;
-The geocoding information fetched form Mapbox;
-The user current location; 
-user_choices-interaction-data
+● The application is able to display the map on the web browser.
 
-**3.3 Output**
+● The application is able to display current available bikes on the web browser.
 
-Nearest-available-bike-station&docking; 
-Predicted-bike-availability(based on historical bike-data, weather-history and weather forecast.
+● The application is able to display the prediction of available bikes on the web browser.
 
-**3.4 Overview functionalities (needs further specification)**
+● The application is able to adjust its appearance on different devices (Responsive design)
 
-Show weather-forecast (to bike or not to bike); 
-Find nearest bike at desired/current location in least amount of clicks; 
-Find nearest dock at desired/current destination in least amount of clicks; 
-Show forecast of bike availability (at given datetime and location); 
-Show availability for card payments at given location.
 
-**4. Wireframes**
+Data Collection:
+
+● The Data Collection Server is able to fetch weather data from service provider.
+
+● The Data Collection Server is able to fetch geocoding data from service provider.
+
+● The Data Collection Server is able to fetch bike station data from service provider.
+
+
+Interaction between Data Collection Server and Web Application Server
+
+● The Data Collection Server is able to return data to Web Application Server.
+13
+
+● The Web Application Server is able to send request to Data Collection Server and process the returned data from Data Collection Server .
+
+
+Machine Learning:
+
+● The Machine Learning Server is able to read data from database.
+
+● The Machine Learning Server is able to process request and send required data to
+the client.
+
+● Beta Feature: A Linear Regression Model is applied to predict bike availability for the next hour. The functionality is in beta and shows currently a minimum accuracy of 20%.
+
+
+**4. Wireframe, Mockup V1**
 
 <p align="left">
   <img src="https://github.com/scarletgrant/team9/blob/master/documentation/Wireframe_DublinBikes_Desktop_V01.png" height="400" title="hover text">
