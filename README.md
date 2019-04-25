@@ -5,6 +5,14 @@ Software Engineering Project
 
 Computer Science Conversion Program
 
+
+**Final Product V1**
+
+<p align="left">
+  <img src="https://github.com/scarletgrant/team9/blob/master/documentation/Screenshot_V1_2019-04-25 at 09.57.16.png" height="400" title="hover text">
+<alt="screenshot">
+</p>
+
 **1. Introduction**
 
 The DublinBikes Project is part of the Software Engineering module of the Computer Science conversion course. It is the first group project of the program where the students explore Scrum and agile development methodologies.
@@ -118,12 +126,4 @@ Machine Learning:
 the client.
 
 ● Beta Feature: A Linear Regression Model is applied to predict bike availability for the next hour. The functionality is in beta and shows currently a minimum accuracy of 20%.
-
-
-**4. Wireframe, Mockup V1**
-
-<p align="left">
-  <img src="https://github.com/scarletgrant/team9/blob/master/documentation/Wireframe_DublinBikes_Desktop_V01.png" height="400" title="hover text">
-<alt="wireframes">
-</p>
 
